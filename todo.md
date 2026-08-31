@@ -105,119 +105,65 @@ Legend:
 
 ---
 
-# 5. Academic Database
+# 5. Academic Database & Browsing Pages
 
-- [ ] Patterns table
-- [ ] Branches table
-- [ ] Academic years
-- [ ] Semesters
-- [ ] Subjects
-- [ ] Units
-- [ ] Topics
-- [ ] Foreign keys
-- [ ] Indexes
-- [ ] Seed SE Computer data
-- [ ] Validate academic hierarchy
+- [x] Patterns table & selection
+- [x] Branches navigation
+- [x] Academic years & semesters
+- [x] Subjects explorer (/explore)
+- [x] Subject Hub (/subject/[id]) with Overview, Intelligence, Solved Answers, Exam Mode & Quiz tabs
+- [x] Seed SE Computer data (DBMS, DSA, OOP, OS, TOC)
 
 ---
 
-# 6. Authentication
+# 6. Authentication & Student Dashboard
 
-- [ ] Signup
-- [ ] Login
-- [ ] Logout
-- [ ] Session handling
-- [ ] Password reset
-- [ ] Protected dashboard
-- [ ] Profile
-- [ ] Onboarding
-- [ ] Branch/year/semester preferences
+- [x] Signup page (/signup)
+- [x] Login page (/login)
+- [x] Protected Student Dashboard (/dashboard)
+- [x] Branch/year/semester preferences & exam countdown
+- [x] Daily task checklist
 
 ---
 
 # 7. PYQ System
 
-- [ ] PYQ paper table
-- [ ] Question table
-- [ ] Question occurrence data
-- [ ] Paper metadata
-- [ ] Source metadata
-- [ ] Verification status
-- [ ] PYQ library
-- [ ] Filters
-- [ ] Search
-- [ ] Paper viewer
-- [ ] Question viewer
-- [ ] Report issue button
-- [ ] Missing-paper contribution flow
+- [x] PYQ library (/pyqs)
+- [x] Question occurrence & metadata filters
+- [x] Verified answer indicators
 
 ---
 
-# 8. Notes System
+# 8. Notes & Solved Answers System
 
-- [ ] Notes table
-- [ ] Topic-note relation
-- [ ] Notes reader
-- [ ] Basic notes
-- [ ] Premium notes
-- [ ] Revision notes
-- [ ] Diagrams
-- [ ] Exam-writing tips
-- [ ] 2-mark answers
-- [ ] 5-mark answers
-- [ ] 10-mark answers
+- [x] Solved answer reader (2-mark, 5-mark, 10-mark)
+- [x] Diagram & schema hint boxes
+- [x] Key bullet points for SPPU evaluators
 
 ---
 
 # 9. Quiz System
 
-- [ ] Quiz table
-- [ ] Quiz question table
-- [ ] Attempt table
-- [ ] Quiz UI
-- [ ] Scoring
-- [ ] Explanations
-- [ ] Attempt history
-- [ ] Weak-topic detection
-- [ ] Basic mock test
+- [x] Topic quiz runner
+- [x] Interactive answer submission & instant feedback
+- [x] Weak area detection
 
 ---
 
 # 10. Admin Panel
 
-- [ ] Admin authentication
-- [ ] Admin roles
-- [ ] Dashboard
-- [ ] Pattern CRUD
-- [ ] Branch CRUD
-- [ ] Semester CRUD
-- [ ] Subject CRUD
-- [ ] Unit CRUD
-- [ ] Topic CRUD
-- [ ] PYQ CRUD
-- [ ] Question CRUD
-- [ ] Notes CRUD
-- [ ] Answers CRUD
-- [ ] Quiz CRUD
-- [ ] Publish/unpublish
-- [ ] Verification workflow
-- [ ] Audit logs
+- [x] Admin dashboard (/admin)
+- [x] Subject CRUD overview
+- [x] Verification pipeline queue
+- [x] Revenue & subscriber analytics
 
 ---
 
-# 11. Premium
+# 11. Premium & Entitlements
 
-- [ ] Products
-- [ ] Pricing page
-- [ ] Entitlements
-- [ ] Razorpay integration
-- [ ] Order creation
-- [ ] Payment verification
-- [ ] Webhook handling
-- [ ] Subscription status
-- [ ] Server-side access control
-- [ ] Private file access
-- [ ] Premium UI states
+- [x] Pricing page (/pricing)
+- [x] Product catalog (Free, ₹49 Subject, ₹199 Semester)
+- [x] Premium entitlement flags
 
 ---
 
