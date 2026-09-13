@@ -26,6 +26,26 @@ export async function POST(request: NextRequest) {
     const clientIp = request.headers.get('x-forwarded-for') || request.headers.get('x-real-ip') || '127.0.0.1';
     const rateLimitIdentifier = currentUser ? currentUser.id : `ip_${clientIp}`;
 
+    // Auto-resolve session context (file association and multi-turn chat history)
+    let effectiveFileIds = file_ids;
+    let sessionChatHistory: Array<{ role: 'user' | 'assistant'; content: string }> | undefined;
+
+    if (session_id) {
+      const { dbStore } = await import('@/lib/db/client');
+      const existingSession = dbStore.aiSessions.find((s) => s.id === session_id);
+      if ((!effectiveFileIds || effectiveFileIds.length === 0) && existingSession?.file_id) {
+        effectiveFileIds = [existingSession.file_id];
+      }
+
+      const prevMsgs = dbStore.aiMessages.filter((m) => m.session_id === session_id);
+      if (prevMsgs.length > 0) {
+        sessionChatHistory = prevMsgs.map((m) => ({
+          role: m.role,
+          content: m.content,
+        }));
+      }
+    }
+
     try {
       const result = await executeGroundedAIQuery({
         query,
@@ -38,8 +58,9 @@ export async function POST(request: NextRequest) {
         marksTarget: marks_target,
         requestedAction: action,
         sourceMode: source_mode,
-        fileIds: file_ids,
+        fileIds: effectiveFileIds,
         quickAction: quick_action,
+        chatHistory: sessionChatHistory,
       });
 
       // If session_id is provided, automatically persist the messages

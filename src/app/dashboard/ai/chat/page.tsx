@@ -180,18 +180,23 @@ function ChatPageContent() {
     initialActionRanRef.current = true;
 
     let promptText = '';
+    let quickAction: string | undefined;
     if (initialAction === 'review') {
       promptText = `Please provide a structured Quick Review of ${activeFile?.filename || 'this uploaded document'}, outlining key formulas, syllabus units, and core definitions.`;
+      quickAction = 'SUMMARIZE';
     } else if (initialAction === 'questions') {
       promptText = `Generate the top recurring and high-yield SPPU exam questions based on ${activeFile?.filename || 'this study material'}, categorizing into 2-Mark, 5-Mark, and 10-Mark questions.`;
+      quickAction = 'IMPORTANT_QUESTIONS';
     } else if (initialAction === 'model_answer') {
       promptText = `Write a verified 5-mark model answer for the primary concept in ${activeFile?.filename || 'this document'}, with step-marking breakdown and key evaluator points.`;
+      quickAction = '5_MARK';
     } else if (initialAction === 'quiz') {
       promptText = `Create a diagnostic practice quiz with 3 multiple-choice questions from ${activeFile?.filename || 'this document'} with detailed SPPU examiner explanations.`;
+      quickAction = 'QUIZ_ME_FROM_THIS';
     }
 
     if (promptText) {
-      sendMessage(promptText);
+      sendMessage(promptText, quickAction);
     }
   }, [initialAction, sessionId, activeFile]);
 
@@ -239,7 +244,7 @@ function ChatPageContent() {
   };
 
   // Send message to AI
-  const sendMessage = async (customPrompt?: string) => {
+  const sendMessage = async (customPrompt?: string, quickActionParam?: string) => {
     const textToSend = (customPrompt !== undefined ? customPrompt : inputQuery).trim();
     if (!textToSend || isLoading) return;
 
@@ -275,6 +280,10 @@ function ChatPageContent() {
 
       if (activeFile) {
         payload.file_ids = [activeFile.id];
+      }
+
+      if (quickActionParam) {
+        payload.quick_action = quickActionParam;
       }
 
       const res = await fetch('/api/ai', {
@@ -561,7 +570,7 @@ function ChatPageContent() {
                     <FileText className="w-3 h-3" />
                     <span>{activeFile.filename}</span>
                     <span className="text-[10px] bg-teal-50 dark:bg-teal-950/60 px-1 rounded border border-teal-200 dark:border-teal-800">
-                      {activeFile.chunks_count || 4} chunks
+                      {activeFile.page_count ? `${activeFile.page_count} pages • ` : ''}{activeFile.chunks_count || 4} chunks
                     </span>
                   </span>
                 ) : (
@@ -586,6 +595,68 @@ function ChatPageContent() {
             </Link>
           </div>
         </header>
+
+        {/* Document Quick Action Strip */}
+        {activeFile && (
+          <div className="px-4 py-1.5 bg-slate-50 dark:bg-slate-900/60 border-b border-slate-200/80 dark:border-slate-800/80 flex items-center gap-2 overflow-x-auto text-[11px] shrink-0 z-10">
+            <span className="text-slate-500 dark:text-slate-400 font-medium shrink-0 flex items-center gap-1">
+              <Zap className="w-3 h-3 text-amber-500" />
+              <span>PDF Actions:</span>
+            </span>
+            <button
+              type="button"
+              onClick={() =>
+                sendMessage(
+                  `Provide a structured Quick Review of ${activeFile.filename}, outlining core definitions, formulas, and high-yield topics.`,
+                  'SUMMARIZE'
+                )
+              }
+              className="inline-flex items-center gap-1 px-2.5 py-1 rounded-md bg-white dark:bg-slate-800 hover:bg-teal-50 dark:hover:bg-teal-950/60 text-slate-700 dark:text-slate-200 hover:text-teal-600 dark:hover:text-teal-400 border border-slate-200 dark:border-slate-700 shadow-2xs transition-all shrink-0 font-medium"
+            >
+              <BookOpen className="w-3 h-3 text-teal-500" />
+              <span>Quick Review</span>
+            </button>
+            <button
+              type="button"
+              onClick={() =>
+                sendMessage(
+                  `Generate the top recurring and high-yield SPPU exam questions based on ${activeFile.filename}, categorizing into 2-Mark, 5-Mark, and 10-Mark questions.`,
+                  'IMPORTANT_QUESTIONS'
+                )
+              }
+              className="inline-flex items-center gap-1 px-2.5 py-1 rounded-md bg-white dark:bg-slate-800 hover:bg-indigo-50 dark:hover:bg-indigo-950/60 text-slate-700 dark:text-slate-200 hover:text-indigo-600 dark:hover:text-indigo-400 border border-slate-200 dark:border-slate-700 shadow-2xs transition-all shrink-0 font-medium"
+            >
+              <HelpCircle className="w-3 h-3 text-indigo-500" />
+              <span>Important Questions</span>
+            </button>
+            <button
+              type="button"
+              onClick={() =>
+                sendMessage(
+                  `Write a verified 5-mark model answer for the primary concept in ${activeFile.filename}, with step-marking breakdown and key evaluator points.`,
+                  '5_MARK'
+                )
+              }
+              className="inline-flex items-center gap-1 px-2.5 py-1 rounded-md bg-white dark:bg-slate-800 hover:bg-amber-50 dark:hover:bg-amber-950/60 text-slate-700 dark:text-slate-200 hover:text-amber-600 dark:hover:text-amber-400 border border-slate-200 dark:border-slate-700 shadow-2xs transition-all shrink-0 font-medium"
+            >
+              <FileText className="w-3 h-3 text-amber-500" />
+              <span>Model Answers</span>
+            </button>
+            <button
+              type="button"
+              onClick={() =>
+                sendMessage(
+                  `Create a diagnostic practice quiz with 3 multiple-choice questions from ${activeFile.filename} with detailed SPPU examiner explanations.`,
+                  'QUIZ_ME_FROM_THIS'
+                )
+              }
+              className="inline-flex items-center gap-1 px-2.5 py-1 rounded-md bg-white dark:bg-slate-800 hover:bg-emerald-50 dark:hover:bg-emerald-950/60 text-slate-700 dark:text-slate-200 hover:text-emerald-600 dark:hover:text-emerald-400 border border-slate-200 dark:border-slate-700 shadow-2xs transition-all shrink-0 font-medium"
+            >
+              <Sparkles className="w-3 h-3 text-emerald-500" />
+              <span>Practice Quiz</span>
+            </button>
+          </div>
+        )}
 
         {/* Message Stream */}
         <div className="flex-1 overflow-y-auto px-4 sm:px-6 md:px-8 py-6 space-y-6">
@@ -612,7 +683,8 @@ function ChatPageContent() {
                   type="button"
                   onClick={() =>
                     sendMessage(
-                      `Provide a complete Quick Review of ${activeFile?.filename || 'the syllabus'}, summarizing main concepts, formulas, and high-yield topics.`
+                      `Provide a complete Quick Review of ${activeFile?.filename || 'the syllabus'}, summarizing main concepts, formulas, and high-yield topics.`,
+                      'SUMMARIZE'
                     )
                   }
                   className="p-3.5 rounded-xl border border-slate-200/90 dark:border-slate-800 bg-white dark:bg-slate-900/60 hover:border-teal-500 dark:hover:border-teal-400 hover:shadow-depth-1 transition-all group"
@@ -634,7 +706,8 @@ function ChatPageContent() {
                   type="button"
                   onClick={() =>
                     sendMessage(
-                      `List the most probable and recurring SPPU exam questions from ${activeFile?.filename || 'this subject'}, categorized into 2-Mark, 5-Mark, and 10-Mark questions.`
+                      `List the most probable and recurring SPPU exam questions from ${activeFile?.filename || 'this subject'}, categorized into 2-Mark, 5-Mark, and 10-Mark questions.`,
+                      'IMPORTANT_QUESTIONS'
                     )
                   }
                   className="p-3.5 rounded-xl border border-slate-200/90 dark:border-slate-800 bg-white dark:bg-slate-900/60 hover:border-teal-500 dark:hover:border-teal-400 hover:shadow-depth-1 transition-all group"
@@ -656,7 +729,8 @@ function ChatPageContent() {
                   type="button"
                   onClick={() =>
                     sendMessage(
-                      `Write an examiner-standard 5-Mark model answer with step markings and diagram explanations from ${activeFile?.filename || 'the syllabus'}.`
+                      `Write an examiner-standard 5-Mark model answer with step markings and diagram explanations from ${activeFile?.filename || 'the syllabus'}.`,
+                      '5_MARK'
                     )
                   }
                   className="p-3.5 rounded-xl border border-slate-200/90 dark:border-slate-800 bg-white dark:bg-slate-900/60 hover:border-teal-500 dark:hover:border-teal-400 hover:shadow-depth-1 transition-all group"
@@ -678,7 +752,8 @@ function ChatPageContent() {
                   type="button"
                   onClick={() =>
                     sendMessage(
-                      `Create a diagnostic 3-question quiz with multiple choice options and detailed explanations from ${activeFile?.filename || 'this study material'}.`
+                      `Create a diagnostic 3-question quiz with multiple choice options and detailed explanations from ${activeFile?.filename || 'this study material'}.`,
+                      'QUIZ_ME_FROM_THIS'
                     )
                   }
                   className="p-3.5 rounded-xl border border-slate-200/90 dark:border-slate-800 bg-white dark:bg-slate-900/60 hover:border-teal-500 dark:hover:border-teal-400 hover:shadow-depth-1 transition-all group"

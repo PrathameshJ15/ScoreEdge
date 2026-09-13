@@ -330,7 +330,7 @@ export default function DashboardAIPage() {
                     &quot;{currentFile.filename}&quot; Analyzed & Ready!
                   </h3>
                   <p className="text-xs text-emerald-700 dark:text-emerald-400 mt-1">
-                    Semantic text extracted ({currentFile.chunks_count || 4} chunks indexed). Choose an action below or click to chat.
+                    Semantic text extracted ({currentFile.page_count ? `${currentFile.page_count} pages, ` : ''}{currentFile.chunks_count || 4} chunks indexed). Choose an action below or click to chat.
                   </p>
                 </div>
               </div>

@@ -3,6 +3,8 @@ import { GroundedAcademicContext } from './retrieval';
 import {
   SCOREEDGE_CORE_SYSTEM_PROMPT,
   buildScoreEdgeSystemPrompt,
+  GROQ_STUDY_TUTOR_SYSTEM_PROMPT,
+  buildGroqStudyTutorSystemPrompt,
   AITaskType,
   QuickActionType,
   getTaskSpecificInstruction,
@@ -20,7 +22,9 @@ export interface ContextBuilderOptions {
     filename: string;
     chunkIndex: number;
     content: string;
+    pageNumber?: number;
   }>;
+  chatHistory?: AIMessage[];
 }
 
 /**
@@ -60,8 +64,9 @@ export function buildGroundedPromptMessages(
   if (sourceMode === 'MY_MATERIAL' || sourceMode === 'BOTH') {
     if (studentChunks.length > 0) {
       studentChunks.forEach((chunk, i) => {
+        const pageLabel = chunk.pageNumber ? `Page ${chunk.pageNumber} | ` : '';
         studentMaterialBlocks.push(
-          `[Document: ${chunk.filename} | Section ${chunk.chunkIndex + 1}]\n${chunk.content}`
+          `[Document: ${chunk.filename} | ${pageLabel}Section ${chunk.chunkIndex + 1}]\n${chunk.content}`
         );
       });
     } else if (sourceMode === 'MY_MATERIAL') {
@@ -224,8 +229,8 @@ Never make unsupported predictions.`;
   }
 
   const baseSystemPrompt = context.university_name
-    ? buildScoreEdgeSystemPrompt(context.university_name, context.pattern_name, context.branch_name)
-    : SCOREEDGE_CORE_SYSTEM_PROMPT;
+    ? buildGroqStudyTutorSystemPrompt(context.university_name, context.pattern_name, context.branch_name)
+    : GROQ_STUDY_TUTOR_SYSTEM_PROMPT;
 
   const systemContent = `${baseSystemPrompt}
 
@@ -248,8 +253,14 @@ ${rawScoreEdgeContext || 'No verified academic records provided for this query.'
 
   const userContent = userQuery;
 
+  // Include recent multi-turn conversation history for continuity
+  const historyMessages = (options?.chatHistory || [])
+    .filter((m) => m && m.content && m.content.trim().length > 0)
+    .slice(-8);
+
   const messages: AIMessage[] = [
     { role: 'system', content: systemContent },
+    ...historyMessages,
     { role: 'user', content: userContent },
   ];
 

@@ -27,6 +27,7 @@ export interface AIExecutionParams {
   sourceMode?: KnowledgeSourceMode;
   fileIds?: string[];
   quickAction?: QuickActionType;
+  chatHistory?: Array<{ role: 'user' | 'assistant'; content: string }>;
 }
 
 export interface AIGroundedResult {
@@ -192,10 +193,12 @@ export async function executeGroundedAIQuery(params: AIExecutionParams): Promise
   // 3. STUDENT MATERIAL RETRIEVAL (If source is MY_MATERIAL or BOTH)
   let studentMatches: ReturnType<typeof searchStudentDocumentChunks> = [];
   if (sourceMode === 'MY_MATERIAL' || sourceMode === 'BOTH') {
+    const retrievalLimit = params.quickAction ? 6 : 4;
     studentMatches = searchStudentDocumentChunks(
       params.userId || 'usr-student-1',
       params.query,
-      params.fileIds
+      params.fileIds,
+      retrievalLimit
     );
   }
 
@@ -203,12 +206,13 @@ export async function executeGroundedAIQuery(params: AIExecutionParams): Promise
     filename: m.file.filename,
     chunkIndex: m.chunk.chunk_index,
     content: m.chunk.content,
+    pageNumber: m.chunk.page_number,
   }));
 
   const studentCitations = studentMatches.map((m) => ({
     type: 'STUDENT_MATERIAL',
     id: m.chunk.id,
-    title: `${m.file.filename} (Section ${m.chunk.chunk_index + 1})`,
+    title: `${m.file.filename} (${m.chunk.page_number ? `Page ${m.chunk.page_number}` : `Section ${m.chunk.chunk_index + 1}`})`,
     relevance: Math.min(1.0, Math.round((m.score / 10) * 100) / 100),
     snippet: m.chunk.content.slice(0, 150),
   }));
@@ -267,6 +271,7 @@ export async function executeGroundedAIQuery(params: AIExecutionParams): Promise
     sourceMode,
     quickAction: params.quickAction,
     studentMaterialChunks: studentChunksForPrompt,
+    chatHistory: params.chatHistory as any,
   });
 
   // 6. PROVIDER DISPATCH WITH TIMEOUT & FALLBACK

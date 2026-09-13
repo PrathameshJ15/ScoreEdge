@@ -1,129 +1,133 @@
-'use client';
-
 import React from 'react';
 import Link from 'next/link';
 import { ShieldCheck } from 'lucide-react';
 import { ScoreEdgeLogo } from '@/components/brand/ScoreEdgeLogo';
 
-export const Footer: React.FC = () => {
+export const Footer = () => {
   return (
-    <footer className="bg-[#070d18] text-slate-400 py-12 border-t border-slate-800 text-xs">
+    <footer className="bg-slate-950 text-slate-400 py-16 border-t border-slate-800 text-xs">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
-        <div className="grid grid-cols-2 md:grid-cols-5 gap-8 pb-10 border-b border-slate-800/80">
+        <div className="grid grid-cols-1 md:grid-cols-5 gap-10 pb-12 border-b border-slate-800/80">
           
-          {/* Brand & Purpose */}
-          <div className="col-span-2 space-y-3">
-            <ScoreEdgeLogo variant="horizontal" size="sm" href="/" />
-            <p className="text-slate-400 text-xs leading-relaxed max-w-sm font-sans pt-1">
-              SPPU Exam Intelligence platform. Know what to study, when to study it, and how to prepare for Pune University engineering exams.
+          {/* Brand Col */}
+          <div className="md:col-span-2 space-y-4">
+            <div className="flex items-center gap-3">
+              <ScoreEdgeLogo variant="horizontal" size="md" href="/" />
+              <span className="text-[10px] font-mono font-semibold uppercase px-1.5 py-0.5 rounded bg-slate-900 text-slate-400 border border-slate-800">
+                SPPU Engine
+              </span>
+            </div>
+
+            <p className="text-slate-400 leading-relaxed max-w-sm text-xs">
+              The high-yield examination intelligence engine for Savitribai Phule Pune University engineering students. Providing deterministic PYQ clustering, examiner-graded answer rubrics, and crash-time triage planners.
             </p>
-            <div className="pt-1 flex items-center gap-2 text-[11px] font-mono text-slate-500">
-              <span className="w-1.5 h-1.5 rounded-full bg-teal-400" />
-              <span>SPPU 2024 &amp; 2019 Curriculum Synced</span>
+
+            {/* Live Platform Operational Status */}
+            <div className="inline-flex items-center gap-2 px-2.5 py-1 rounded-full bg-slate-900 border border-slate-800 text-[11px] font-mono text-slate-400">
+              <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+              <span>All Systems Operational · SPPU 2024 NEP Synced</span>
             </div>
+
+            <p className="text-[11px] text-slate-500 max-w-sm leading-relaxed">
+              Legal Disclaimer: ScoreEdge is an independent educational technology platform and is not officially affiliated with or endorsed by Savitribai Phule Pune University (SPPU). All university names, syllabus documents, and exam references are property of their respective trademark holders.
+            </p>
           </div>
 
-          {/* Product */}
-          <div className="space-y-2.5">
-            <div className="font-mono text-[11px] font-bold uppercase tracking-wider text-slate-200">
-              Product
-            </div>
-            <ul className="space-y-2 text-xs">
+          {/* Col 2: Platform Links */}
+          <div className="space-y-3">
+            <h4 className="font-bold text-white uppercase tracking-wider text-[11px] font-mono">Platform</h4>
+            <ul className="space-y-2.5">
               <li>
-                <Link href="/explore" className="hover:text-teal-400 transition-colors">
-                  Explore
-                </Link>
+                <a href="#pyq-intelligence" className="hover:text-white transition-colors">
+                  PYQ Recurrence Engine
+                </a>
               </li>
               <li>
-                <Link href="/pyqs" className="hover:text-teal-400 transition-colors">
-                  PYQs
-                </Link>
+                <a href="#notes" className="hover:text-white transition-colors">
+                  Examiner Model Answers
+                </a>
               </li>
               <li>
-                <Link href="/subjects" className="hover:text-teal-400 transition-colors">
-                  Subjects
-                </Link>
+                <a href="#exam-mode" className="hover:text-white transition-colors">
+                  Emergency Exam Simulator
+                </a>
               </li>
               <li>
-                <Link href="/exam-mode" className="hover:text-teal-400 transition-colors">
-                  Exam Mode
-                </Link>
+                <a href="#subjects" className="hover:text-white transition-colors">
+                  Curriculum &amp; Syllabus
+                </a>
               </li>
               <li>
-                <Link href="/pricing" className="hover:text-teal-400 transition-colors">
-                  Pricing
-                </Link>
+                <a href="#pricing" className="hover:text-white transition-colors">
+                  Pricing &amp; Subject Passes
+                </a>
               </li>
             </ul>
           </div>
 
-          {/* Resources */}
-          <div className="space-y-2.5">
-            <div className="font-mono text-[11px] font-bold uppercase tracking-wider text-slate-200">
-              Resources
-            </div>
-            <ul className="space-y-2 text-xs">
+          {/* Col 3: Academic Subjects */}
+          <div className="space-y-3">
+            <h4 className="font-bold text-white uppercase tracking-wider text-[11px] font-mono">SE Computer Subjects</h4>
+            <ul className="space-y-2.5 font-mono text-[11px]">
               <li>
-                <Link href="/notes" className="hover:text-teal-400 transition-colors">
-                  Notes
-                </Link>
+                <span className="text-slate-300">DBMS (210241)</span>
               </li>
               <li>
-                <Link href="/questions" className="hover:text-teal-400 transition-colors">
-                  Question Bank
-                </Link>
+                <span className="text-slate-300">DSA (210242)</span>
               </li>
               <li>
-                <Link href="/explore" className="hover:text-teal-400 transition-colors">
-                  Quizzes
-                </Link>
+                <span className="text-slate-300">OOP (210243)</span>
               </li>
               <li>
-                <Link href="/exam-mode" className="hover:text-teal-400 transition-colors">
-                  Study Planner
-                </Link>
+                <span className="text-slate-300">Operating Systems (210244)</span>
+              </li>
+              <li>
+                <span className="text-slate-300">TOC (210245)</span>
               </li>
             </ul>
           </div>
 
-          {/* Company & Legal */}
-          <div className="space-y-2.5">
-            <div className="font-mono text-[11px] font-bold uppercase tracking-wider text-slate-200">
-              Company &amp; Legal
-            </div>
-            <ul className="space-y-2 text-xs">
+          {/* Col 4: Trust & Legal */}
+          <div className="space-y-3">
+            <h4 className="font-bold text-white uppercase tracking-wider text-[11px] font-mono">Trust &amp; Compliance</h4>
+            <ul className="space-y-2.5">
               <li>
-                <Link href="/about" className="hover:text-teal-400 transition-colors">
-                  About
+                <Link href="/about" className="hover:text-white transition-colors">
+                  Academic Methodology
                 </Link>
               </li>
               <li>
-                <Link href="/contact" className="hover:text-teal-400 transition-colors">
-                  Contact
-                </Link>
+                <span className="hover:text-white cursor-pointer transition-colors">
+                  Privacy Policy
+                </span>
               </li>
               <li>
-                <Link href="/privacy" className="hover:text-teal-400 transition-colors">
-                  Privacy
-                </Link>
+                <span className="hover:text-white cursor-pointer transition-colors">
+                  Terms of Service
+                </span>
               </li>
               <li>
-                <Link href="/terms" className="hover:text-teal-400 transition-colors">
-                  Terms
-                </Link>
+                <span className="hover:text-white cursor-pointer transition-colors">
+                  Fair Use &amp; Paper Copyright
+                </span>
+              </li>
+              <li>
+                <span className="hover:text-white cursor-pointer transition-colors">
+                  Student Support Desk
+                </span>
               </li>
             </ul>
           </div>
 
         </div>
 
-        {/* Bottom Strip */}
-        <div className="pt-6 flex flex-col sm:flex-row items-center justify-between gap-3 text-[11px] text-slate-500 font-mono">
-          <span>&copy; {new Date().getFullYear()} ScoreEdge. SPPU Exam Intelligence.</span>
-          <span className="flex items-center gap-1.5 text-slate-400">
-            <ShieldCheck className="w-3.5 h-3.5 text-teal-500" />
-            <span>Built for SPPU Engineering Students</span>
+        {/* Bottom Bar */}
+        <div className="pt-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-[11px] text-slate-500 font-mono">
+          <span>&copy; {new Date().getFullYear()} ScoreEdge Exam Intelligence. All rights reserved.</span>
+          <span className="flex items-center gap-1.5">
+            <ShieldCheck className="w-3.5 h-3.5 text-slate-400" />
+            <span>Built for Pune University Engineering Students</span>
           </span>
         </div>
 

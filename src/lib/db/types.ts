@@ -536,6 +536,7 @@ export interface UserStudyFile {
   error_message?: string | null;
   extracted_text?: string;
   chunks_count: number;
+  page_count?: number;
   ocr_applied: boolean;
   created_at: string;
   updated_at: string;
@@ -550,6 +551,7 @@ export interface StudyFileChunk {
   content: string;
   token_count: number;
   headings?: string[];
+  page_number?: number;
   created_at: string;
 }
 
