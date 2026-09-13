@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useAuth } from '@/context/AuthContext';
@@ -26,9 +26,11 @@ import {
   Search,
   CheckCircle2,
   Zap,
+  AlertTriangle,
 } from 'lucide-react';
 
 import { getStudentEnrolledSubjects, EnrolledSubjectData } from '@/lib/curriculum/studentCurriculum';
+import { getLocalBacklogs, BacklogSubjectItem } from '@/lib/backlog/backlogStore';
 
 interface DashboardShellProps {
   children: React.ReactNode;
@@ -45,6 +47,22 @@ export const DashboardShell: React.FC<DashboardShellProps> = ({
   const { user, logout } = useAuth();
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [userDropdownOpen, setUserDropdownOpen] = useState(false);
+
+  const [backlogs, setBacklogs] = useState<BacklogSubjectItem[]>([]);
+
+  useEffect(() => {
+    // Load local backlogs or user backlogs
+    const local = getLocalBacklogs();
+    if (local.length > 0) {
+      setBacklogs(local);
+    } else if (user?.backlog_subjects_json) {
+      try {
+        setBacklogs(JSON.parse(user.backlog_subjects_json));
+      } catch {
+        // ignore
+      }
+    }
+  }, [user]);
 
   const enrolledSubjects = React.useMemo(() => getStudentEnrolledSubjects(user), [user]);
   const defaultSubjectId = enrolledSubjects[0]?.id || 'dbms';
@@ -68,6 +86,12 @@ export const DashboardShell: React.FC<DashboardShellProps> = ({
       label: 'My Subjects',
       icon: BookOpen,
       badge: `${enrolledSubjects.length} Active`,
+    },
+    {
+      href: '/dashboard/backlog',
+      label: 'Backlog Tracker',
+      icon: AlertTriangle,
+      badge: backlogs.length > 0 ? `${backlogs.length} ATKT` : 'Clear Arrears',
     },
     {
       href: '/dashboard/notes',
@@ -264,11 +288,22 @@ export const DashboardShell: React.FC<DashboardShellProps> = ({
                   onChange={(e) => onSubjectChange?.(e.target.value)}
                   className="appearance-none bg-slate-100 dark:bg-slate-800 text-slate-900 dark:text-white font-mono text-xs font-bold pl-3 pr-8 py-1.5 rounded-control border border-slate-200/80 dark:border-slate-700 cursor-pointer focus:outline-none focus:ring-1 focus:ring-teal-500"
                 >
-                  {enrolledSubjects.map((sub) => (
-                    <option key={sub.id} value={sub.id}>
-                      {sub.shortName} ({sub.code})
-                    </option>
-                  ))}
+                  <optgroup label={`Enrolled ${user?.academic_year || 'Current'} Subjects`}>
+                    {enrolledSubjects.map((sub) => (
+                      <option key={sub.id} value={sub.id}>
+                        {sub.shortName} ({sub.code})
+                      </option>
+                    ))}
+                  </optgroup>
+                  {backlogs.length > 0 && (
+                    <optgroup label="Backlog / ATKT Subjects">
+                      {backlogs.map((b) => (
+                        <option key={b.subjectId} value={b.subjectId}>
+                          ⚠️ {b.shortName} ({b.code}) - Backlog
+                        </option>
+                      ))}
+                    </optgroup>
+                  )}
                 </select>
                 <ChevronDown className="w-3.5 h-3.5 text-slate-400 absolute right-2.5 top-1/2 -translate-y-1/2 pointer-events-none" />
               </div>

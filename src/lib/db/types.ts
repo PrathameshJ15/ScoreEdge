@@ -59,6 +59,9 @@ export interface User {
   semester_number?: number | null;
   pattern?: string | null;
   target_sgpa?: number | null;
+  university?: string | null;
+  college_name?: string | null;
+  backlog_subjects_json?: string | null;
   avatar_url?: string | null;
   email_verified: boolean;
   is_active: boolean;

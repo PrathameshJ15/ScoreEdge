@@ -15,7 +15,23 @@ export interface AuthUser {
   semester_number?: number | null;
   pattern?: string | null;
   target_sgpa?: number | null;
+  university?: string | null;
+  college_name?: string | null;
+  backlog_subjects_json?: string | null;
   avatar_url?: string | null;
+}
+
+export interface StudentOnboardingData {
+  university?: string;
+  college_name?: string;
+  department?: string;
+  branch_code?: string;
+  academic_year?: string;
+  year_number?: number;
+  semester_number?: number;
+  pattern?: string;
+  target_sgpa?: number;
+  backlog_subjects?: any[];
 }
 
 interface AuthContextType {
@@ -29,6 +45,7 @@ interface AuthContextType {
     email: string,
     password: string,
     fullName: string,
+    onboarding?: StudentOnboardingData,
     role?: UserRole
   ) => Promise<{ success: boolean; error?: string; user?: AuthUser }>;
   logout: () => Promise<void>;
@@ -98,6 +115,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     email: string,
     password: string,
     fullName: string,
+    onboarding?: StudentOnboardingData,
     role: UserRole = 'STUDENT'
   ) => {
     try {
@@ -109,6 +127,16 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
           password,
           full_name: fullName,
           role,
+          university: onboarding?.university,
+          college_name: onboarding?.college_name,
+          department: onboarding?.department,
+          branch_code: onboarding?.branch_code,
+          academic_year: onboarding?.academic_year,
+          year_number: onboarding?.year_number,
+          semester_number: onboarding?.semester_number,
+          pattern: onboarding?.pattern,
+          target_sgpa: onboarding?.target_sgpa,
+          backlog_subjects: onboarding?.backlog_subjects,
         }),
       });
 

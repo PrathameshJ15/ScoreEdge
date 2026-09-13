@@ -15,7 +15,22 @@ export async function POST(request: NextRequest) {
       return apiError('VALIDATION_ERROR', 'Invalid registration parameters', 400, parseResult.error.format());
     }
 
-    const { email, password, full_name, role } = parseResult.data;
+    const {
+      email,
+      password,
+      full_name,
+      role,
+      university = 'Savitribai Phule Pune University (SPPU)',
+      college_name,
+      department = 'Computer Engineering',
+      branch_code = 'COMP',
+      academic_year = 'SE',
+      year_number = 2,
+      semester_number = 4,
+      pattern = '2024 Pattern (NEP)',
+      target_sgpa = 9.0,
+      backlog_subjects = [],
+    } = parseResult.data;
 
     // Security Gate: Self-registration for elevated roles (ADMIN, REVIEWER) is strictly forbidden
     // Only existing administrators can register or provision admin/reviewer accounts
@@ -44,6 +59,16 @@ export async function POST(request: NextRequest) {
       password_hash: hashPassword(password),
       full_name,
       role: assignedRole,
+      department,
+      branch_code,
+      academic_year,
+      year_number,
+      semester_number,
+      pattern,
+      target_sgpa,
+      university,
+      college_name: college_name || null,
+      backlog_subjects_json: JSON.stringify(backlog_subjects),
       avatar_url: null,
       email_verified: false,
       is_active: true,
@@ -63,6 +88,16 @@ export async function POST(request: NextRequest) {
             passwordHash: newUser.password_hash,
             fullName: newUser.full_name,
             role: newUser.role as any,
+            department: newUser.department,
+            branchCode: newUser.branch_code,
+            academicYear: newUser.academic_year,
+            yearNumber: newUser.year_number,
+            semesterNumber: newUser.semester_number,
+            pattern: newUser.pattern,
+            targetSgpa: newUser.target_sgpa,
+            university: newUser.university,
+            collegeName: newUser.college_name,
+            backlogSubjectsJson: newUser.backlog_subjects_json,
             avatarUrl: newUser.avatar_url,
             emailVerified: newUser.email_verified,
             isActive: newUser.is_active,
@@ -76,7 +111,7 @@ export async function POST(request: NextRequest) {
     // Decoupled, privacy-preserving event tracking (no raw PII)
     trackServerEvent('signup', {
       userId: newUser.id,
-      properties: { role: newUser.role },
+      properties: { role: newUser.role, branch: branch_code, year: academic_year },
       headers: request.headers,
     });
 
@@ -89,6 +124,16 @@ export async function POST(request: NextRequest) {
           email: newUser.email,
           full_name: newUser.full_name,
           role: newUser.role,
+          department: newUser.department,
+          branch_code: newUser.branch_code,
+          academic_year: newUser.academic_year,
+          year_number: newUser.year_number,
+          semester_number: newUser.semester_number,
+          pattern: newUser.pattern,
+          target_sgpa: newUser.target_sgpa,
+          university: newUser.university,
+          college_name: newUser.college_name,
+          backlog_subjects_json: newUser.backlog_subjects_json,
         },
         token,
       },
