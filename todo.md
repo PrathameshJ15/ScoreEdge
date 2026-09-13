@@ -9,6 +9,7 @@ Legend:
 
 ---
 
+
 # 0. Product Decisions
 
 - [ ] Finalize product/brand name
@@ -69,44 +70,51 @@ Legend:
 
 ---
 
-# 3. Design System
+# 3. Design System & UI/UX Redesign
 
-- [x] Finalize color tokens
-- [x] Finalize typography
-- [x] Finalize spacing
-- [x] Finalize radius
-- [x] Finalize shadows/elevation
-- [x] Build Button
-- [x] Build Input
-- [x] Build SearchInput
-- [x] Build Select
-- [x] Build Tabs
-- [x] Build Badge
-- [x] Build PriorityBadge
-- [x] Build Card
-- [x] Build responsive navigation
+- [x] Premium Academic SaaS design tokens (`tailwind.config.js`, `globals.css`)
+- [x] Removed AI glow blobs, clipped multi-stop gradients, and crypto purple
+- [x] Implemented subtle physical 3D depth system (`shadow-depth-1` through `shadow-depth-4`, layered card stacks, tactile hover elevation)
+- [x] Built/Refined Button with active press state and academic variants (no rainbow gradients)
+- [x] Built Card with depth variants (`default`, `elevated`, `layered`, `flat`) and tactile hover lift
+- [x] Built PriorityBadge with semantic contrast (`MUST STUDY`, `HIGH`, `MEDIUM`, `LOW`)
+- [x] Built Badge with crisp semantic academic borders
+- [x] Built EmptyState, ErrorState, and Skeleton loading primitives
+- [x] Fixed ThemeToggle to respect user system preference and default to academic light mode
 
 ---
 
-# 4. Marketing Website
+# 4. Global Navigation & Screens Redesign
 
-- [x] Homepage hero
-- [x] Feature section
-- [x] PYQ Intelligence preview
-- [x] Exam Mode preview
-- [x] Premium preview
-- [x] Solved answers preview
-- [x] Academic hierarchy browser
-- [x] Quiz & practice simulator
-- [x] FAQ
-- [x] Footer
-- [x] Mobile optimization
-- [x] SEO metadata
+- [x] Redesigned Navbar with real route navigation, branch selector, and no broken hash anchors
+- [x] Built Mobile Bottom Navigation (`Home | Subjects | PYQs | Study | Account`) per `design.md` Section 10
+- [x] Redesigned Homepage Hero with layered 3D card preview, academic copy, and trust metrics
+- [x] Redesigned PYQ Intelligence Preview with concept recurrence percentages and clustering details
+- [x] Redesigned Emergency Exam Mode Simulator with interactive time presets (2h, 5h, 1d) and checklists
+- [x] Redesigned 2/5/10-Mark Solved Answers Preview with high academic readability and evaluator key points
+- [x] Redesigned Curriculum Hierarchy Browser with clickable subject cards and semester filtering
+- [x] Redesigned Interactive Practice Quiz with instant feedback and step-by-step academic explanations
+- [x] Redesigned Pricing Section with layered depth, Single Subject Pack (₹49), and Semester Pass (₹199)
+- [x] Redesigned Student Dashboard as personal exam command center with countdown and analytics
+- [x] Redesigned Dynamic Subject Hub (`/subject/[id]`) with dynamic data lookup, units, clusters, and model answers
+- [x] Redesigned PYQ Library (`/pyqs`) with search, filter by year/subject, and empty state
+- [x] Redesigned Admin CMS (`/admin`) with metrics cards and human verification pipeline
+- [x] Redesigned Login (`/login`) & Signup (`/signup`) with academic branding and depth elevation
+- [x] Redesigned FAQ and Footer with real platform and subject links
 
 ---
 
-# 5. Academic Database & Browsing Pages
+# 5. Academic Database & REST API Foundation
 
+- [x] Normalized 28-entity PostgreSQL schema (`src/db/schema.sql`) with foreign keys, cascade rules, update triggers, indexes, and Row Level Security (RLS)
+- [x] TypeScript domain entity types & enums (`src/lib/db/types.ts`)
+- [x] Production SQL seed (`src/db/seed.sql`) & in-memory database store (`src/lib/db/seedData.ts`, `src/lib/db/client.ts`)
+- [x] Standardized API response envelopes (`src/lib/api/response.ts`) with safe `{ data, meta }` and `{ error }` structures
+- [x] Secure authentication utility (`src/lib/api/auth.ts`) with scrypt password hashing, session tokens, and role-based guards
+- [x] Request payload and query validation with Zod (`src/lib/api/validators.ts`)
+- [x] Complete REST API routes (Auth, Academic Hierarchy, Questions, PYQs, Answers, Notes, Quizzes, Progress, Study Plans, Products, Orders, Entitlements, Admin, AI Guard)
+- [x] Architecture & database documentation (`DATABASE.md`, `API.md`, `DATA_MODEL.md`, `PROJECT_AUDIT.md`)
+- [x] Automated test suite with 18 passing tests across DB store and REST API endpoints (`tests/database.test.ts`, `tests/api.test.ts`)
 - [x] Patterns table & selection
 - [x] Branches navigation
 - [x] Academic years & semesters

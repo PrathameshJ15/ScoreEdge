@@ -1,4 +1,4 @@
-export type PriorityLevel = 'MUST_STUDY' | 'HIGH' | 'MEDIUM' | 'LOW';
+export type PriorityLevel = 'MUST_STUDY' | 'VERY_HIGH' | 'HIGH' | 'MEDIUM' | 'LOW';
 
 export interface Pattern {
   id: string;

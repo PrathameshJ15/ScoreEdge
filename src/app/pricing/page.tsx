@@ -1,22 +1,30 @@
-'use client';
-
 import React from 'react';
-import { Navbar } from '@/components/landing/Navbar';
-import { Footer } from '@/components/landing/Footer';
-import { PricingSection } from '@/components/landing/PricingSection';
-import { FAQSection } from '@/components/landing/FAQSection';
+import { Metadata } from 'next';
+import { PricingClientView } from '@/components/pricing/PricingClientView';
+import { constructMetadata, getBreadcrumbSchema } from '@/lib/seo/metadata';
+
+export const metadata: Metadata = constructMetadata({
+  title: 'Pricing & Passes — Single Subject & Semester All-Access',
+  description:
+    'Choose your SPPU engineering pass. Flexible pricing for single subject passes or complete semester all-access passes with instant UPI activation.',
+  path: '/pricing',
+  keywords: ['SPPU pass pricing', 'DBMS pass price', 'SE Computer semester pass', 'engineering exam notes cost'],
+});
 
 export default function PricingPage() {
+  const breadcrumbSchema = getBreadcrumbSchema([
+    { name: 'Home', url: '/' },
+    { name: 'Pricing & Passes', url: '/pricing' },
+  ]);
+
   return (
-    <div className="flex flex-col min-h-screen bg-slate-50 dark:bg-slate-950">
-      <Navbar />
-
-      <main className="flex-grow py-8">
-        <PricingSection />
-        <FAQSection />
-      </main>
-
-      <Footer />
-    </div>
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
+      />
+      <PricingClientView />
+    </>
   );
 }
+

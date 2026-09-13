@@ -4,145 +4,171 @@ import React, { useState } from 'react';
 import Link from 'next/link';
 import { Button } from '@/components/ui/Button';
 import { ThemeToggle } from '@/components/ui/ThemeToggle';
-import { Target, Menu, X, Sparkles, BookOpen, Clock, Award, ChevronDown } from 'lucide-react';
+import {
+  Compass,
+  Menu,
+  X,
+  Search,
+  BookOpen,
+  FileText,
+  Clock,
+  Sparkles,
+  HelpCircle,
+  Award,
+  ChevronDown,
+  Layers,
+  ArrowRight,
+} from 'lucide-react';
+
+import { ScoreEdgeLogo } from '@/components/brand/ScoreEdgeLogo';
 
 export const Navbar = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [branchDropdownOpen, setBranchDropdownOpen] = useState(false);
+  const [searchOpen, setSearchOpen] = useState(false);
+
+  const navLinks = [
+    { label: 'Home', href: '/' },
+    { label: 'Subjects', href: '/explore' },
+    { label: 'PYQs', href: '/pyqs' },
+    { label: 'Notes', href: '/notes' },
+    { label: 'QB', href: '/questions' },
+    { label: 'QP', href: '/pyqs' },
+    { label: 'Exam Mode', href: '/exam-mode' },
+    { label: 'Ask AI', href: '/ai' },
+    { label: 'Pricing', href: '/pricing' },
+  ];
 
   return (
-    <header className="sticky top-0 z-50 bg-white/90 dark:bg-slate-950/90 backdrop-blur-md border-b border-slate-200/80 dark:border-slate-800 transition-colors">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
-        {/* Brand Logo */}
-        <Link href="/" className="flex items-center gap-2.5 group">
-          <div className="w-10 h-10 rounded-xl bg-brand-600 dark:bg-brand-500 flex items-center justify-center text-white shadow-md shadow-brand-500/20 group-hover:scale-105 transition-transform">
-            <Target className="w-5 h-5 stroke-[2.5]" />
-          </div>
-          <div className="flex flex-col">
-            <span className="font-extrabold text-xl tracking-tight text-slate-900 dark:text-white flex items-center gap-1">
-              Score<span className="text-brand-600 dark:text-brand-400">Edge</span>
-              <span className="text-xs px-1.5 py-0.5 rounded bg-brand-100 dark:bg-brand-950 text-brand-700 dark:text-brand-300 font-semibold border border-brand-200 dark:border-brand-800">SPPU</span>
+    <>
+      {/* Top Subtle SPPU Ticker */}
+      <div className="bg-[#0f172a] text-slate-200 text-xs py-1.5 px-4 border-b border-slate-800 text-center font-medium">
+        <div className="max-w-7xl mx-auto flex items-center justify-between text-[11.5px]">
+          <div className="flex items-center gap-2">
+            <span className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-teal-500/20 text-teal-300 font-semibold font-mono text-[10.5px]">
+              <span className="w-1.5 h-1.5 rounded-full bg-teal-400 animate-pulse" />
+              SPPU 2024 &amp; 2019 PATTERN
+            </span>
+            <span className="hidden sm:inline text-slate-300">
+              Exam Intelligence &amp; Verified Solved Answers for Engineering Undergraduates
             </span>
           </div>
-        </Link>
-
-        {/* Desktop Nav Links */}
-        <nav className="hidden md:flex items-center gap-7 text-sm font-medium text-slate-600 dark:text-slate-300">
-          <div className="relative">
-            <button
-              onClick={() => setBranchDropdownOpen(!branchDropdownOpen)}
-              className="flex items-center gap-1 hover:text-brand-600 dark:hover:text-brand-400 py-2 transition-colors"
-            >
-              <span>SE Computer</span>
-              <ChevronDown className="w-4 h-4" />
-            </button>
-            {branchDropdownOpen && (
-              <div className="absolute top-full left-0 mt-1 w-56 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-card shadow-lg p-2 z-50">
-                <div className="px-3 py-1.5 text-xs font-semibold text-slate-400 uppercase tracking-wider">Select Branch</div>
-                <button className="w-full text-left px-3 py-2 text-xs font-semibold rounded-control bg-brand-50 dark:bg-brand-950/60 text-brand-600 dark:text-brand-400 flex items-center justify-between">
-                  <span>SE Computer Engg</span>
-                  <span className="w-2 h-2 rounded-full bg-emerald-500"></span>
-                </button>
-                <button className="w-full text-left px-3 py-2 text-xs text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-control mt-1">
-                  SE IT Engineering (Coming Soon)
-                </button>
-                <button className="w-full text-left px-3 py-2 text-xs text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-control mt-1">
-                  SE AI & DS (Coming Soon)
-                </button>
-              </div>
-            )}
+          <div className="hidden md:flex items-center gap-4 text-slate-400 text-xs font-mono">
+            <span>SE Computer Engineering</span>
+            <span>•</span>
+            <Link href="/explore" className="text-teal-400 hover:text-teal-300 font-semibold">
+              Browse Syllabus &rarr;
+            </Link>
           </div>
-          <a href="#pyq-intelligence" className="hover:text-brand-600 dark:hover:text-brand-400 transition-colors flex items-center gap-1.5">
-            <Sparkles className="w-4 h-4 text-brand-500" />
-            <span>PYQ Intelligence</span>
-          </a>
-          <a href="#exam-mode" className="hover:text-brand-600 dark:hover:text-brand-400 transition-colors flex items-center gap-1.5">
-            <Clock className="w-4 h-4 text-amber-500" />
-            <span>Exam Mode</span>
-          </a>
-          <a href="#notes" className="hover:text-brand-600 dark:hover:text-brand-400 transition-colors flex items-center gap-1.5">
-            <BookOpen className="w-4 h-4 text-blue-500" />
-            <span>Solved Answers</span>
-          </a>
-          <a href="#pricing" className="hover:text-brand-600 dark:hover:text-brand-400 transition-colors flex items-center gap-1.5">
-            <Award className="w-4 h-4 text-emerald-500" />
-            <span>Pricing</span>
-          </a>
-        </nav>
-
-        {/* Action Buttons & Theme Toggle */}
-        <div className="hidden md:flex items-center gap-3">
-          <ThemeToggle />
-          <Link href="#pricing">
-            <Button variant="outline" size="sm">
-              Log In
-            </Button>
-          </Link>
-          <Link href="#pyq-intelligence">
-            <Button variant="primary" size="sm" className="gap-1.5">
-              <span>Start Free</span>
-            </Button>
-          </Link>
-        </div>
-
-        {/* Mobile Menu & Theme Toggle */}
-        <div className="flex items-center gap-2 md:hidden">
-          <ThemeToggle />
-          <button
-            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            className="p-2 text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-control"
-            aria-label="Toggle Menu"
-          >
-            {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
-          </button>
         </div>
       </div>
 
-      {/* Mobile Drawer */}
-      {mobileMenuOpen && (
-        <div className="md:hidden border-b border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950 px-4 pt-3 pb-6 space-y-3">
-          <a
-            href="#pyq-intelligence"
-            onClick={() => setMobileMenuOpen(false)}
-            className="block py-2 text-base font-medium text-slate-700 dark:text-slate-200"
-          >
-            PYQ Intelligence
-          </a>
-          <a
-            href="#exam-mode"
-            onClick={() => setMobileMenuOpen(false)}
-            className="block py-2 text-base font-medium text-slate-700 dark:text-slate-200"
-          >
-            Exam Mode
-          </a>
-          <a
-            href="#notes"
-            onClick={() => setMobileMenuOpen(false)}
-            className="block py-2 text-base font-medium text-slate-700 dark:text-slate-200"
-          >
-            Solved Answers
-          </a>
-          <a
-            href="#pricing"
-            onClick={() => setMobileMenuOpen(false)}
-            className="block py-2 text-base font-medium text-slate-700 dark:text-slate-200"
-          >
-            Pricing & Plans
-          </a>
-          <div className="pt-3 border-t border-slate-200 dark:border-slate-800 flex flex-col gap-2">
-            <Link href="#pricing" onClick={() => setMobileMenuOpen(false)}>
-              <Button variant="outline" className="w-full">
-                Log In
+      {/* Main Sticky Navbar */}
+      <header className="sticky top-0 z-50 bg-[#faf9f5]/90 dark:bg-[#0a1120]/90 backdrop-blur-md border-b border-slate-200/80 dark:border-slate-800 transition-colors">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between gap-4">
+          
+          {/* Brand Logo */}
+          <ScoreEdgeLogo variant="horizontal" size="md" href="/" />
+
+          {/* Desktop Navigation Links */}
+          <nav className="hidden xl:flex items-center gap-5 text-xs font-semibold text-slate-600 dark:text-slate-300">
+            {navLinks.map((item) => (
+              <Link
+                key={item.label}
+                href={item.href}
+                className="hover:text-teal-700 dark:hover:text-teal-300 py-1 transition-colors relative"
+              >
+                {item.label}
+              </Link>
+            ))}
+          </nav>
+
+          {/* Right Action Buttons */}
+          <div className="hidden md:flex items-center gap-3 shrink-0">
+            <Link
+              href="/search"
+              className="p-2 rounded-control text-slate-500 hover:text-slate-800 dark:hover:text-slate-200 hover:bg-slate-200/60 dark:hover:bg-slate-800 transition-colors"
+              title="Search subjects, topics, PYQs..."
+              aria-label="Search"
+            >
+              <Search className="w-4 h-4" />
+            </Link>
+
+            <ThemeToggle />
+
+            <Link href="/login">
+              <Button
+                variant="ghost"
+                size="sm"
+                className="text-xs font-semibold text-[#0f172a] dark:text-slate-200"
+              >
+                Login
               </Button>
             </Link>
-            <Link href="#pyq-intelligence" onClick={() => setMobileMenuOpen(false)}>
-              <Button variant="primary" className="w-full">
-                Start Preparing Free
+
+            <Link href="/signup">
+              <Button
+                size="sm"
+                className="bg-teal-700 hover:bg-teal-800 text-white text-xs font-semibold px-4 shadow-sm"
+              >
+                Get Started
               </Button>
             </Link>
           </div>
+
+          {/* Mobile Hamburger & Actions */}
+          <div className="flex items-center gap-2 xl:hidden">
+            <Link
+              href="/search"
+              className="p-2 text-slate-600 dark:text-slate-300 hover:bg-slate-200/60 dark:hover:bg-slate-800 rounded-control"
+              aria-label="Search"
+            >
+              <Search className="w-4 h-4" />
+            </Link>
+            <ThemeToggle />
+            <button
+              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+              className="p-2 text-slate-700 dark:text-slate-200 hover:bg-slate-200/60 dark:hover:bg-slate-800 rounded-control transition-colors"
+              aria-label="Toggle navigation menu"
+            >
+              {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+            </button>
+          </div>
         </div>
-      )}
-    </header>
+
+        {/* Mobile Navigation Drawer */}
+        {mobileMenuOpen && (
+          <div className="xl:hidden border-b border-slate-200 dark:border-slate-800 bg-[#faf9f5] dark:bg-[#0a1120] px-4 pt-3 pb-6 space-y-2 shadow-lg">
+            <div className="px-2 py-1 text-[11px] font-mono font-bold text-slate-400 uppercase tracking-wider">
+              Navigation
+            </div>
+            <div className="grid grid-cols-2 gap-1.5">
+              {navLinks.map((item) => (
+                <Link
+                  key={item.label}
+                  href={item.href}
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="px-3 py-2 rounded-control text-xs font-semibold text-slate-700 dark:text-slate-200 hover:bg-teal-50 dark:hover:bg-teal-950/40 hover:text-teal-700 dark:hover:text-teal-300 transition-colors"
+                >
+                  {item.label}
+                </Link>
+              ))}
+            </div>
+
+            <div className="pt-3 border-t border-slate-200 dark:border-slate-800 flex flex-col gap-2">
+              <Link href="/login" onClick={() => setMobileMenuOpen(false)}>
+                <Button variant="outline" className="w-full text-xs">
+                  Login
+                </Button>
+              </Link>
+              <Link href="/signup" onClick={() => setMobileMenuOpen(false)}>
+                <Button className="w-full bg-teal-700 hover:bg-teal-800 text-white text-xs font-semibold">
+                  Get Started Free
+                </Button>
+              </Link>
+            </div>
+          </div>
+        )}
+      </header>
+    </>
   );
 };

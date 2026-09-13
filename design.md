@@ -98,25 +98,33 @@ Keep exact color values in the implementation's theme/token file rather than sca
 
 ## 5. Typography
 
-Use a modern sans-serif typeface.
+ScoreEdge uses a dual-font system engineered for academic authority, data clarity, and reading endurance:
 
-Hierarchy:
+- **Primary UI Font:** `Inter` (weights: 400, 500, 600, 700) for all navigation, buttons, forms, dashboards, cards, tables, filters, tabs, badges, statistics, and system UI.
+- **Academic Reading Font:** `Source Serif 4` (weights: 400, 600, 700) selectively for long-form academic explanations, detailed notes, exam answers, definitions, and theory-heavy content.
 
-- Display / Hero
-- H1
-- H2
-- H3
-- Body
-- Small
-- Caption
-- Label
+### Hierarchy & Responsive Type Scale:
 
-Rules:
-- Strong contrast between headings and body text.
-- Comfortable line height.
-- Avoid overly narrow text.
-- Do not use more than 2 font families.
-- Exam content should prioritize readability over stylistic typography.
+| Token / Role | Font Family | Desktop (Size / Leading) | Mobile (Size / Leading) | Weight | Usage |
+| :--- | :--- | :--- | :--- | :--- | :--- |
+| **Display** | Inter | 56px / 64px | 36–42px / 42–48px | 700 | Major desktop hero headings |
+| **H1** | Inter | 36px / 44px | 30–34px / 36–40px | 700 | Page titles & subject headers |
+| **H2** | Inter | 28px / 36px | 24–28px / 30–34px | 700 | Section headers |
+| **H3** | Inter | 22px / 30px | 20–22px / 26–28px | 650–700 | Card titles & sub-sections |
+| **H4** | Inter | 18px / 26px | 18px / 26px | 600 | Group headers & item titles |
+| **Body** | Inter | 16px / 26px | 16px / 26px | 400 | Standard UI text & descriptions |
+| **Small** | Inter | 14px / 22px | 14px / 22px | 400–500 | Secondary copy & sub-info |
+| **Caption** | Inter | 12–13px / 18px | 12–13px / 18px | 500 | Microcopy & metadata |
+| **Label** | Inter | 12–14px / 20px | 12–14px / 20px | 600 | Form labels & tags |
+| **Academic Body** | Source Serif 4 | 17–18px / 28–30px | 16–17px / 26–28px | 400 | Notes, solved answers, theory (~68ch max width) |
+
+### Numbers and Data:
+Use Inter with tabular numeric alignment (`font-variant-numeric: tabular-nums; font-feature-settings: 'tnum' 1, 'cv02' 1, 'cv03' 1, 'cv04' 1`) for marks, percentages, countdown timers, PYQ frequency, year stamps, and pricing tables.
+
+### Design Rules:
+- Strong contrast between headings and body text created by weight, size, line-height, and tracking—not gradients or AI glow.
+- Strict limit of 2 font families (Inter + Source Serif 4).
+- Academic content prioritizes legibility, comfortable measure (60–75 characters per line), and clear distinction of code/formulas.
 
 ---
 

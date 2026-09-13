@@ -4,17 +4,17 @@
 
 @layer base {
   :root {
-    --background: 210 40% 98%;
-    --foreground: 222.2 84% 4.9%;
+    --background: 45 25% 98%;
+    --foreground: 222.2 47% 11%;
   }
 
   .dark {
-    --background: 222.2 84% 4.9%;
-    --foreground: 210 40% 98%;
+    --background: 222.2 47% 8%;
+    --foreground: 45 25% 98%;
   }
 
   body {
-    @apply bg-slate-50 text-slate-900 dark:bg-slate-950 dark:text-slate-100 antialiased font-sans selection:bg-brand-500/20 selection:text-brand-600;
+    @apply bg-[#faf9f5] text-[#0f172a] dark:bg-[#0a1120] dark:text-[#f8fafc] antialiased font-sans selection:bg-brand-600/15 selection:text-brand-800;
   }
 }
 
@@ -26,3 +26,28 @@
   -ms-overflow-style: none;
   scrollbar-width: none;
 }
+
+/* Modern SaaS Background Dot Grid */
+.bg-grid-pattern {
+  background-image: radial-gradient(rgba(100, 116, 139, 0.15) 1px, transparent 1px);
+  background-size: 24px 24px;
+}
+
+.dark .bg-grid-pattern {
+  background-image: radial-gradient(rgba(148, 163, 184, 0.1) 1px, transparent 1px);
+  background-size: 24px 24px;
+}
+
+/* Fine micro-border utility */
+.glass-panel {
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(226, 232, 240, 0.8);
+}
+
+.dark .glass-panel {
+  background: rgba(15, 23, 42, 0.85);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(30, 41, 59, 0.8);
+}
+

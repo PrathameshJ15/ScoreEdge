@@ -29,6 +29,12 @@ export const PriorityBadge: React.FC<PriorityBadgeProps> = ({
       icon: Flame,
       dotColor: 'bg-red-500',
     },
+    VERY_HIGH: {
+      label: 'VERY HIGH',
+      colorClass: 'bg-rose-500/10 text-rose-600 border-rose-500/30 dark:bg-rose-950/40 dark:text-rose-400 dark:border-rose-800/50',
+      icon: Flame,
+      dotColor: 'bg-rose-500',
+    },
     HIGH: {
       label: 'HIGH PRIORITY',
       colorClass: 'bg-orange-500/10 text-orange-600 border-orange-500/30 dark:bg-orange-950/40 dark:text-orange-400 dark:border-orange-800/50',
@@ -47,7 +53,12 @@ export const PriorityBadge: React.FC<PriorityBadgeProps> = ({
       icon: Circle,
       dotColor: 'bg-slate-400',
     },
-  }[priority];
+  }[priority] || {
+    label: priority,
+    colorClass: 'bg-slate-500/10 text-slate-600 border-slate-400/30 dark:bg-slate-800/40 dark:text-slate-400 dark:border-slate-700/50',
+    icon: Circle,
+    dotColor: 'bg-slate-400',
+  };
 
   const IconComponent = config.icon;
 

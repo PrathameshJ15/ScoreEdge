@@ -156,6 +156,9 @@ Collect:
 
 ### Security
 
+
+
+
 All authorization must be server-side.
 
 ---
