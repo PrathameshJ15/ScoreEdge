@@ -32,7 +32,7 @@ import {
   Flame,
 } from 'lucide-react';
 
-export default function DashboardQuestionsPage() {
+function QuestionsPageContent() {
   const searchParams = useSearchParams();
   const initialSubjectParam = searchParams.get('subject');
 
@@ -351,5 +351,13 @@ export default function DashboardQuestionsPage() {
 
       </div>
     </DashboardShell>
+  );
+}
+
+export default function DashboardQuestionsPage() {
+  return (
+    <React.Suspense fallback={<div className="p-6 text-sm text-slate-500">Loading Questions...</div>}>
+      <QuestionsPageContent />
+    </React.Suspense>
   );
 }

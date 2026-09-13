@@ -1,7 +1,6 @@
 let PrismaClientClass: any = null;
 try {
   // Dynamic require so build/runtime doesn't fail when @prisma/client is not installed
-  // eslint-disable-next-line @typescript-eslint/no-require-imports
   PrismaClientClass = require('@prisma/client')?.PrismaClient;
 } catch {
   // Prisma client is optional; system falls back to in-memory dbStore

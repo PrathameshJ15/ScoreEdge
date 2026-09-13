@@ -32,7 +32,7 @@ import {
   Flame,
 } from 'lucide-react';
 
-export default function DashboardPYQsPage() {
+function PYQsPageContent() {
   const searchParams = useSearchParams();
   const initialSubjectParam = searchParams.get('subject');
 
@@ -375,5 +375,13 @@ export default function DashboardPYQsPage() {
 
       </div>
     </DashboardShell>
+  );
+}
+
+export default function DashboardPYQsPage() {
+  return (
+    <React.Suspense fallback={<div className="p-6 text-sm text-slate-500">Loading PYQs...</div>}>
+      <PYQsPageContent />
+    </React.Suspense>
   );
 }
