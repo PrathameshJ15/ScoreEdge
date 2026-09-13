@@ -35,3 +35,6 @@ next-env.d.ts
 Thumbs.db
 .vscode/
 .idea/
+
+# Large local media/dataset downloads
+/public/db_contents/
