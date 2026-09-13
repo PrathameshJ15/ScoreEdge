@@ -101,9 +101,12 @@ export async function POST(request: NextRequest) {
 
     // 5. Text Extraction
     try {
-      const { text, ocrApplied } = await extractTextFromFile(fileBuffer, filename, mimeType);
+      const { text, ocrApplied, pageCount } = await extractTextFromFile(fileBuffer, filename, mimeType);
       newFile.extracted_text = text;
       newFile.ocr_applied = ocrApplied;
+      if (pageCount) {
+        newFile.page_count = pageCount;
+      }
 
       // 6. Semantic Chunking
       const chunks = chunkDocumentText(text, fileId, userId);

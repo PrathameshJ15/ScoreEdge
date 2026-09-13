@@ -47,7 +47,7 @@ import {
   Zap,
 } from 'lucide-react';
 
-export default function DashboardSubjectsPage() {
+function SubjectsPageContent() {
   const searchParams = useSearchParams();
   const initialSubjectParam = searchParams.get('subject');
   const isBacklogParam = searchParams.get('backlog') === 'true';
@@ -653,5 +653,13 @@ export default function DashboardSubjectsPage() {
 
       </div>
     </DashboardShell>
+  );
+}
+
+export default function DashboardSubjectsPage() {
+  return (
+    <React.Suspense fallback={<div className="p-6 text-sm text-slate-500">Loading Subjects...</div>}>
+      <SubjectsPageContent />
+    </React.Suspense>
   );
 }

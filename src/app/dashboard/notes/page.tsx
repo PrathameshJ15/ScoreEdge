@@ -32,7 +32,7 @@ import {
   Flame,
 } from 'lucide-react';
 
-export default function DashboardNotesPage() {
+function NotesPageContent() {
   const searchParams = useSearchParams();
   const initialSubjectParam = searchParams.get('subject');
 
@@ -343,5 +343,13 @@ export default function DashboardNotesPage() {
 
       </div>
     </DashboardShell>
+  );
+}
+
+export default function DashboardNotesPage() {
+  return (
+    <React.Suspense fallback={<div className="p-6 text-sm text-slate-500">Loading Notes...</div>}>
+      <NotesPageContent />
+    </React.Suspense>
   );
 }

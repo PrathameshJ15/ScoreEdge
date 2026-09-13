@@ -34,7 +34,7 @@ const DURATION_SECONDS_MAP = {
   '1d': 12 * 3600,
 };
 
-export default function DashboardExamModePage() {
+function ExamModeContent() {
   const searchParams = useSearchParams();
   const subjectParam = searchParams.get('subject') || 'dbms';
 
@@ -342,5 +342,13 @@ export default function DashboardExamModePage() {
 
       </div>
     </DashboardShell>
+  );
+}
+
+export default function DashboardExamModePage() {
+  return (
+    <React.Suspense fallback={<div className="p-6 text-sm text-slate-500">Loading Exam Mode...</div>}>
+      <ExamModeContent />
+    </React.Suspense>
   );
 }

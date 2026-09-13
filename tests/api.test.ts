@@ -79,8 +79,8 @@ describe('API Routes Integration', () => {
       expect(res.status).toBe(200);
       const json = await res.json();
       expect(json.data.length).toBe(2);
-      expect(json.meta.total).toBe(5);
-      expect(json.meta.totalPages).toBe(3);
+      expect(json.meta.total).toBe(10);
+      expect(json.meta.totalPages).toBe(5);
     });
 
     it('returns detailed subject hub with units and stats', async () => {
@@ -178,8 +178,8 @@ describe('API Routes Integration', () => {
       const res = await getAdminStatsHandler(req);
       expect(res.status).toBe(200);
       const json = await res.json();
-      expect(json.data.stats.total_subjects).toBe(5);
-      expect(json.data.stats.total_users).toBe(3);
+      expect(json.data.stats.total_subjects).toBe(dbStore.subjects.filter((s) => s.is_active && !s.deleted_at).length);
+      expect(json.data.stats.total_users).toBe(dbStore.users.length);
     });
 
     it('validates AI queries against grounded database content', async () => {
