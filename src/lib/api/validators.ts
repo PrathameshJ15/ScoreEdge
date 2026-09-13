@@ -10,6 +10,16 @@ export const RegisterRequestSchema = z.object({
   password: z.string().min(6, 'Password must be at least 6 characters'),
   full_name: z.string().min(2, 'Name must be at least 2 characters'),
   role: z.enum(['STUDENT', 'ADMIN', 'REVIEWER']).default('STUDENT'),
+  university: z.string().optional().default('Savitribai Phule Pune University (SPPU)'),
+  college_name: z.string().optional().nullable(),
+  department: z.string().optional().default('Computer Engineering'),
+  branch_code: z.string().optional().default('COMP'),
+  academic_year: z.enum(['FE', 'SE', 'TE', 'BE']).optional().default('SE'),
+  year_number: z.number().int().min(1).max(4).optional().default(2),
+  semester_number: z.number().int().min(1).max(8).optional().default(4),
+  pattern: z.string().optional().default('2024 Pattern (NEP)'),
+  target_sgpa: z.number().min(0).max(10).optional().default(9.0),
+  backlog_subjects: z.array(z.any()).optional().default([]),
 });
 
 export const LoginRequestSchema = z.object({
