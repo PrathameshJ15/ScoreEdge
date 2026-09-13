@@ -1,0 +1,567 @@
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+enum UserRole {
+  STUDENT
+  ADMIN
+  REVIEWER
+}
+
+enum ContentStatus {
+  DRAFT
+  REVIEW
+  VERIFIED
+  PUBLISHED
+  ARCHIVED
+}
+
+enum PriorityLevel {
+  MUST_STUDY
+  HIGH
+  MEDIUM
+  LOW
+}
+
+enum DifficultyLevel {
+  EASY
+  MEDIUM
+  HARD
+}
+
+enum QuestionType {
+  THEORY
+  NUMERICAL
+  MCQ
+  DIAGRAM
+  SHORT_ANSWER
+}
+
+enum ExamSession {
+  IN_SEM
+  END_SEM
+  RE_EXAM
+  SUPPLEMENTARY
+}
+
+enum VerificationStatus {
+  UNVERIFIED
+  NEEDS_REVIEW
+  VERIFIED
+  REJECTED
+}
+
+enum TrendDirection {
+  HIGH
+  STABLE
+  EMERGING
+}
+
+enum SourceType {
+  OFFICIAL
+  COMMUNITY
+  INTERNAL
+  REFERENCE
+}
+
+enum ProductType {
+  SUBJECT_PASS
+  SEMESTER_PASS
+  EXAM_CRASH
+}
+
+enum OrderStatus {
+  CREATED
+  PAID
+  FAILED
+  REFUNDED
+}
+
+enum PaymentStatus {
+  SUCCESS
+  FAILED
+}
+
+enum TaskType {
+  MUST_READ_NOTE
+  SOLVE_PYQ
+  PRACTICE_QUIZ
+  REVISION
+}
+
+enum PlanDurationType {
+  TWO_HOURS   @map("2h")
+  FIVE_HOURS  @map("5h")
+  ONE_DAY     @map("1d")
+  THREE_DAYS  @map("3d")
+  SEVEN_DAYS  @map("7d")
+}
+
+model User {
+  id            String          @id @default(uuid())
+  email         String          @unique
+  passwordHash  String          @map("password_hash")
+  fullName      String          @map("full_name")
+  role          UserRole        @default(STUDENT)
+  department    String?         @default("Computer Engineering") @map("department")
+  branchCode    String?         @default("COMP") @map("branch_code")
+  academicYear  String?         @default("SE") @map("academic_year")
+  yearNumber    Int?            @default(2) @map("year_number")
+  semesterNumber Int?           @default(4) @map("semester_number")
+  pattern       String?         @default("2024 Pattern (NEP)") @map("pattern")
+  targetSgpa    Float?          @default(9.0) @map("target_sgpa")
+  avatarUrl     String?         @map("avatar_url")
+  emailVerified Boolean         @default(false) @map("email_verified")
+  isActive      Boolean         @default(true) @map("is_active")
+  createdAt     DateTime        @default(now()) @map("created_at")
+  updatedAt     DateTime        @updatedAt @map("updated_at")
+  deletedAt     DateTime?       @map("deleted_at")
+
+  progress      StudentProgress[]
+  studyPlans    StudyPlan[]
+  orders        Order[]
+  entitlements  Entitlement[]
+  quizAttempts  QuizAttempt[]
+
+  @@index([email])
+  @@index([role])
+  @@map("users")
+}
+
+model University {
+  id          String       @id @default(uuid())
+  code        String       @unique
+  name        String
+  state       String       @default("Maharashtra")
+  country     String       @default("India")
+  websiteUrl  String?      @map("website_url")
+  isActive    Boolean      @default(true) @map("is_active")
+  createdAt   DateTime     @default(now()) @map("created_at")
+  updatedAt   DateTime     @updatedAt @map("updated_at")
+
+  patterns    Pattern[]
+
+  @@map("universities")
+}
+
+model Pattern {
+  id            String       @id @default(uuid())
+  universityId  String       @map("university_id")
+  code          String
+  name          String
+  startYear     Int          @map("start_year")
+  endYear       Int?         @map("end_year")
+  isCurrent     Boolean      @default(false) @map("is_current")
+  createdAt     DateTime     @default(now()) @map("created_at")
+  updatedAt     DateTime     @updatedAt @map("updated_at")
+
+  university    University   @relation(fields: [universityId], references: [id], onDelete: Cascade)
+  branches      Branch[]
+
+  @@unique([universityId, code])
+  @@map("patterns")
+}
+
+model Branch {
+  id            String          @id @default(uuid())
+  patternId     String          @map("pattern_id")
+  code          String
+  name          String
+  shortName     String          @map("short_name")
+  description   String?
+  createdAt     DateTime        @default(now()) @map("created_at")
+  updatedAt     DateTime        @updatedAt @map("updated_at")
+
+  pattern       Pattern         @relation(fields: [patternId], references: [id], onDelete: Cascade)
+  academicYears AcademicYear[]
+  subjects      Subject[]
+
+  @@unique([patternId, code])
+  @@map("branches")
+}
+
+model AcademicYear {
+  id          String      @id @default(uuid())
+  branchId    String      @map("branch_id")
+  yearCode    String      @map("year_code")
+  yearName    String      @map("year_name")
+  yearNumber  Int         @map("year_number")
+  createdAt   DateTime    @default(now()) @map("created_at")
+  updatedAt   DateTime    @updatedAt @map("updated_at")
+
+  branch      Branch      @relation(fields: [branchId], references: [id], onDelete: Cascade)
+  semesters   Semester[]
+
+  @@unique([branchId, yearCode])
+  @@map("academic_years")
+}
+
+model Semester {
+  id              String       @id @default(uuid())
+  academicYearId  String       @map("academic_year_id")
+  semesterNumber  Int          @map("semester_number")
+  name            String
+  createdAt       DateTime     @default(now()) @map("created_at")
+  updatedAt       DateTime     @updatedAt @map("updated_at")
+
+  academicYear    AcademicYear @relation(fields: [academicYearId], references: [id], onDelete: Cascade)
+  subjects        Subject[]
+
+  @@unique([academicYearId, semesterNumber])
+  @@map("semesters")
+}
+
+model Subject {
+  id              String             @id @default(uuid())
+  semesterId      String             @map("semester_id")
+  branchId        String             @map("branch_id")
+  code            String             @unique
+  name            String
+  shortName       String             @map("short_name")
+  credits         Int                @default(4)
+  inSemMarks      Int                @default(30) @map("in_sem_marks")
+  endSemMarks     Int                @default(70) @map("end_sem_marks")
+  totalMarks      Int                @default(100) @map("total_marks")
+  isElective      Boolean            @default(false) @map("is_elective")
+  isActive        Boolean            @default(true) @map("is_active")
+  createdAt       DateTime           @default(now()) @map("created_at")
+  updatedAt       DateTime           @updatedAt @map("updated_at")
+  deletedAt       DateTime?          @map("deleted_at")
+
+  semester        Semester           @relation(fields: [semesterId], references: [id], onDelete: Cascade)
+  branch          Branch             @relation(fields: [branchId], references: [id], onDelete: Cascade)
+  units           Unit[]
+  questions       Question[]
+  notes           Note[]
+  quizzes         Quiz[]
+  clusters        QuestionCluster[]
+  progress        StudentProgress[]
+  products        Product[]
+  studyPlans      StudyPlan[]
+
+  @@index([branchId, semesterId, code])
+  @@map("subjects")
+}
+
+model Unit {
+  id                  String             @id @default(uuid())
+  subjectId           String             @map("subject_id")
+  unitNumber          Int                @map("unit_number")
+  title               String
+  description         String?
+  weightagePercentage Int                @default(16) @map("weightage_percentage")
+  createdAt           DateTime           @default(now()) @map("created_at")
+  updatedAt           DateTime           @updatedAt @map("updated_at")
+
+  subject             Subject            @relation(fields: [subjectId], references: [id], onDelete: Cascade)
+  topics              Topic[]
+  questions           Question[]
+  notes               Note[]
+  clusters            QuestionCluster[]
+
+  @@unique([subjectId, unitNumber])
+  @@map("units")
+}
+
+model Topic {
+  id              String            @id @default(uuid())
+  unitId          String            @map("unit_id")
+  title           String
+  description     String?
+  sequenceOrder   Int               @default(1) @map("sequence_order")
+  importanceLevel PriorityLevel     @default(MEDIUM) @map("importance_level")
+  createdAt       DateTime          @default(now()) @map("created_at")
+  updatedAt       DateTime          @updatedAt @map("updated_at")
+
+  unit            Unit              @relation(fields: [unitId], references: [id], onDelete: Cascade)
+  questions       Question[]
+  notes           Note[]
+
+  @@index([unitId, importanceLevel])
+  @@map("topics")
+}
+
+model Question {
+  id              String                @id @default(uuid())
+  subjectId       String                @map("subject_id")
+  unitId          String                @map("unit_id")
+  topicId         String?               @map("topic_id")
+  questionText    String                @map("question_text")
+  questionType    QuestionType          @default(THEORY) @map("question_type")
+  defaultMarks    Int                   @default(5) @map("default_marks")
+  difficulty      DifficultyLevel       @default(MEDIUM)
+  isPyq           Boolean               @default(false) @map("is_pyq")
+  contentStatus   ContentStatus         @default(PUBLISHED) @map("content_status")
+  createdAt       DateTime              @default(now()) @map("created_at")
+  updatedAt       DateTime              @updatedAt @map("updated_at")
+  deletedAt       DateTime?             @map("deleted_at")
+
+  subject         Subject               @relation(fields: [subjectId], references: [id], onDelete: Cascade)
+  unit            Unit                  @relation(fields: [unitId], references: [id], onDelete: Cascade)
+  topic           Topic?                @relation(fields: [topicId], references: [id], onDelete: SetNull)
+  occurrences     QuestionOccurrence[]
+  clusterMembers  QuestionClusterMember[]
+  answers         Answer[]
+  quizQuestions   QuizQuestion[]
+
+  @@index([subjectId, unitId, isPyq, contentStatus])
+  @@map("questions")
+}
+
+model QuestionOccurrence {
+  id          String       @id @default(uuid())
+  questionId  String       @map("question_id")
+  subjectId   String       @map("subject_id")
+  year        Int
+  month       String
+  session     ExamSession  @default(END_SEM)
+  marks       Int          @default(5)
+  paperCode   String?      @map("paper_code")
+  createdAt   DateTime     @default(now()) @map("created_at")
+
+  question    Question     @relation(fields: [questionId], references: [id], onDelete: Cascade)
+
+  @@index([questionId, year, subjectId])
+  @@map("question_occurrences")
+}
+
+model QuestionCluster {
+  id                  String                  @id @default(uuid())
+  subjectId           String                  @map("subject_id")
+  unitId              String                  @map("unit_id")
+  conceptName         String                  @map("concept_name")
+  frequency           Int                     @default(1)
+  totalPapersAnalyzed Int                     @default(5) @map("total_papers_analyzed")
+  typicalMarks        String                  @default("5-10 Marks") @map("typical_marks")
+  lastAskedYear       Int                     @default(2025) @map("last_asked_year")
+  priority            PriorityLevel           @default(MUST_STUDY)
+  trend               TrendDirection          @default(HIGH)
+  createdAt           DateTime                @default(now()) @map("created_at")
+  updatedAt           DateTime                @updatedAt @map("updated_at")
+
+  subject             Subject                 @relation(fields: [subjectId], references: [id], onDelete: Cascade)
+  unit                Unit                    @relation(fields: [unitId], references: [id], onDelete: Cascade)
+  members             QuestionClusterMember[]
+
+  @@index([subjectId, unitId])
+  @@map("question_clusters")
+}
+
+model QuestionClusterMember {
+  id          String          @id @default(uuid())
+  clusterId   String          @map("cluster_id")
+  questionId  String          @map("question_id")
+  createdAt   DateTime        @default(now()) @map("created_at")
+
+  cluster     QuestionCluster @relation(fields: [clusterId], references: [id], onDelete: Cascade)
+  question    Question        @relation(fields: [questionId], references: [id], onDelete: Cascade)
+
+  @@unique([clusterId, questionId])
+  @@map("question_cluster_members")
+}
+
+model Answer {
+  id            String        @id @default(uuid())
+  questionId    String        @map("question_id")
+  marksTarget   Int           @map("marks_target")
+  contentHtml   String        @map("content_html")
+  rubricJson    String?       @map("rubric_json")
+  contentStatus ContentStatus @default(PUBLISHED) @map("content_status")
+  createdAt     DateTime      @default(now()) @map("created_at")
+  updatedAt     DateTime      @updatedAt @map("updated_at")
+
+  question      Question      @relation(fields: [questionId], references: [id], onDelete: Cascade)
+
+  @@index([questionId, marksTarget])
+  @@map("answers")
+}
+
+model Note {
+  id            String        @id @default(uuid())
+  subjectId     String        @map("subject_id")
+  unitId        String        @map("unit_id")
+  topicId       String?       @map("topic_id")
+  title         String
+  slug          String
+  contentHtml   String        @map("content_html")
+  contentStatus ContentStatus @default(PUBLISHED) @map("content_status")
+  isPremium     Boolean       @default(false) @map("is_premium")
+  createdAt     DateTime      @default(now()) @map("created_at")
+  updatedAt     DateTime      @updatedAt @map("updated_at")
+
+  subject       Subject       @relation(fields: [subjectId], references: [id], onDelete: Cascade)
+  unit          Unit          @relation(fields: [unitId], references: [id], onDelete: Cascade)
+  topic         Topic?        @relation(fields: [topicId], references: [id], onDelete: SetNull)
+
+  @@unique([subjectId, slug])
+  @@index([subjectId, slug])
+  @@map("notes")
+}
+
+model Quiz {
+  id            String         @id @default(uuid())
+  subjectId     String         @map("subject_id")
+  title         String
+  description   String?
+  durationMins  Int            @default(15) @map("duration_mins")
+  createdAt     DateTime       @default(now()) @map("created_at")
+  updatedAt     DateTime       @updatedAt @map("updated_at")
+
+  subject       Subject        @relation(fields: [subjectId], references: [id], onDelete: Cascade)
+  questions     QuizQuestion[]
+  attempts      QuizAttempt[]
+
+  @@map("quizzes")
+}
+
+model QuizQuestion {
+  id            String       @id @default(uuid())
+  quizId        String       @map("quiz_id")
+  questionId    String?      @map("question_id")
+  questionText  String       @map("question_text")
+  optionsJson   String       @map("options_json")
+  correctOption Int          @map("correct_option")
+  explanation   String?
+  createdAt     DateTime     @default(now()) @map("created_at")
+
+  quiz          Quiz         @relation(fields: [quizId], references: [id], onDelete: Cascade)
+  question      Question?    @relation(fields: [questionId], references: [id], onDelete: SetNull)
+
+  @@map("quiz_questions")
+}
+
+model QuizAttempt {
+  id          String   @id @default(uuid())
+  userId      String   @map("user_id")
+  quizId      String   @map("quiz_id")
+  score       Int
+  totalMarks  Int      @map("total_marks")
+  answersJson String?  @map("answers_json")
+  createdAt   DateTime @default(now()) @map("created_at")
+
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  quiz        Quiz     @relation(fields: [quizId], references: [id], onDelete: Cascade)
+
+  @@map("quiz_attempts")
+}
+
+model StudentProgress {
+  id                    String    @id @default(uuid())
+  userId                String    @map("user_id")
+  subjectId             String    @map("subject_id")
+  completedTopicIdsJson String    @default("[]") @map("completed_topic_ids")
+  practicedQuestionIds  String    @default("[]") @map("practiced_question_ids")
+  readinessPercentage   Int       @default(0) @map("readiness_percentage")
+  lastStudiedAt         DateTime  @default(now()) @map("last_studied_at")
+  updatedAt             DateTime  @updatedAt @map("updated_at")
+
+  user                  User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  subject               Subject   @relation(fields: [subjectId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, subjectId])
+  @@index([userId, subjectId])
+  @@map("student_progress")
+}
+
+model StudyPlan {
+  id              String            @id @default(uuid())
+  userId          String            @map("user_id")
+  subjectId       String            @map("subject_id")
+  title           String
+  durationPreset  PlanDurationType  @default(FIVE_HOURS) @map("duration_preset")
+  totalTasks      Int               @default(0) @map("total_tasks")
+  completedTasks  Int               @default(0) @map("completed_tasks")
+  createdAt       DateTime          @default(now()) @map("created_at")
+  updatedAt       DateTime          @updatedAt @map("updated_at")
+
+  user            User              @relation(fields: [userId], references: [id], onDelete: Cascade)
+  subject         Subject           @relation(fields: [subjectId], references: [id], onDelete: Cascade)
+  tasks           StudyPlanTask[]
+
+  @@index([userId])
+  @@map("study_plans")
+}
+
+model StudyPlanTask {
+  id              String    @id @default(uuid())
+  planId          String    @map("plan_id")
+  title           String
+  taskType        TaskType  @default(MUST_READ_NOTE) @map("task_type")
+  priority        PriorityLevel @default(MUST_STUDY)
+  estimatedMins   Int       @default(30) @map("estimated_mins")
+  isCompleted     Boolean   @default(false) @map("is_completed")
+  createdAt       DateTime  @default(now()) @map("created_at")
+
+  plan            StudyPlan @relation(fields: [planId], references: [id], onDelete: Cascade)
+
+  @@map("study_plan_tasks")
+}
+
+model Product {
+  id          String        @id @default(uuid())
+  subjectId   String?       @map("subject_id")
+  title       String
+  description String?
+  productType ProductType   @default(SUBJECT_PASS) @map("product_type")
+  priceInr    Int           @default(49) @map("price_inr")
+  isActive    Boolean       @default(true) @map("is_active")
+  createdAt   DateTime      @default(now()) @map("created_at")
+  updatedAt   DateTime      @updatedAt @map("updated_at")
+
+  subject     Subject?      @relation(fields: [subjectId], references: [id], onDelete: SetNull)
+  orders      Order[]
+  entitlements Entitlement[]
+
+  @@map("products")
+}
+
+model Order {
+  id              String      @id @default(uuid())
+  userId          String      @map("user_id")
+  productId       String      @map("product_id")
+  amountInr       Int         @map("amount_inr")
+  orderStatus     OrderStatus @default(CREATED) @map("order_status")
+  gatewayOrderId  String?     @map("gateway_order_id")
+  createdAt       DateTime    @default(now()) @map("created_at")
+  updatedAt       DateTime    @updatedAt @map("updated_at")
+
+  user            User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  product         Product     @relation(fields: [productId], references: [id], onDelete: Cascade)
+  payment         Payment?
+
+  @@index([userId, gatewayOrderId])
+  @@map("orders")
+}
+
+model Payment {
+  id                String        @id @default(uuid())
+  orderId           String        @unique @map("order_id")
+  gatewayPaymentId  String        @map("gateway_payment_id")
+  paymentStatus     PaymentStatus @default(SUCCESS) @map("payment_status")
+  createdAt         DateTime      @default(now()) @map("created_at")
+
+  order             Order         @relation(fields: [orderId], references: [id], onDelete: Cascade)
+
+  @@map("payments")
+}
+
+model Entitlement {
+  id          String    @id @default(uuid())
+  userId      String    @map("user_id")
+  productId   String    @map("product_id")
+  isActive    Boolean   @default(true) @map("is_active")
+  expiresAt   DateTime? @map("expires_at")
+  createdAt   DateTime  @default(now()) @map("created_at")
+
+  user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  product     Product   @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@map("entitlements")
+}

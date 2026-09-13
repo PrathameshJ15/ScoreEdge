@@ -8,6 +8,13 @@ export interface AuthUser {
   email: string;
   full_name: string;
   role: UserRole;
+  department?: string | null;
+  branch_code?: string | null;
+  academic_year?: string | null;
+  year_number?: number | null;
+  semester_number?: number | null;
+  pattern?: string | null;
+  target_sgpa?: number | null;
   avatar_url?: string | null;
 }
 

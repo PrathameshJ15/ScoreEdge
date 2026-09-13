@@ -174,7 +174,7 @@ export const StudyFileDropzone: React.FC<StudyFileDropzoneProps> = ({
             </div>
             <div>
               <p className="text-xs font-bold text-slate-900 dark:text-white">
-                "{currentFilename}" Successfully Indexed!
+                &quot;{currentFilename}&quot; Successfully Indexed!
               </p>
               <p className="text-[11px] text-emerald-700 dark:text-emerald-400">
                 Extracted semantic chunks are now ready for grounded querying.

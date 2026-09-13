@@ -16,9 +16,44 @@ export async function POST(request: NextRequest) {
 
     const { email, password } = parseResult.data;
 
-    const user = dbStore.users.find(
+    let user = dbStore.users.find(
       (u) => u.email.toLowerCase() === email.toLowerCase() && u.is_active && !u.deleted_at
     );
+
+    if (!user) {
+      try {
+        const { prisma, isDatabaseConfigured } = await import('@/lib/prisma');
+        if (isDatabaseConfigured()) {
+          const dbUser = await prisma.user.findUnique({
+            where: { email: email.toLowerCase() },
+          });
+          if (dbUser && dbUser.isActive && !dbUser.deletedAt) {
+            user = {
+              id: dbUser.id,
+              email: dbUser.email,
+              password_hash: dbUser.passwordHash,
+              full_name: dbUser.fullName,
+              role: dbUser.role as any,
+              department: dbUser.department,
+              branch_code: dbUser.branchCode,
+              academic_year: dbUser.academicYear,
+              year_number: dbUser.yearNumber,
+              semester_number: dbUser.semesterNumber,
+              pattern: dbUser.pattern,
+              target_sgpa: dbUser.targetSgpa,
+              avatar_url: dbUser.avatarUrl,
+              email_verified: dbUser.emailVerified,
+              is_active: dbUser.isActive,
+              created_at: dbUser.createdAt.toISOString(),
+              updated_at: dbUser.updatedAt.toISOString(),
+            };
+            dbStore.users.push(user);
+          }
+        }
+      } catch (err) {
+        console.warn('[Prisma Login Fallback]:', err);
+      }
+    }
 
     if (!user) {
       return apiError('INVALID_CREDENTIALS', 'Invalid email or password', 401);
@@ -46,6 +81,13 @@ export async function POST(request: NextRequest) {
         email: user.email,
         full_name: user.full_name,
         role: user.role,
+        department: user.department,
+        branch_code: user.branch_code,
+        academic_year: user.academic_year,
+        year_number: user.year_number,
+        semester_number: user.semester_number,
+        pattern: user.pattern,
+        target_sgpa: user.target_sgpa,
         avatar_url: user.avatar_url,
       },
       token,

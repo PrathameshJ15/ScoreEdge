@@ -170,18 +170,66 @@ function LoginForm() {
       </form>
 
       {/* Demo helper logins */}
-      <div className="p-3 bg-slate-50 dark:bg-slate-850/60 rounded-card border border-slate-200/80 dark:border-slate-800 text-[11px] space-y-1.5 text-slate-500 dark:text-slate-400">
-        <div className="font-bold text-slate-700 dark:text-slate-300">Quick Test Credentials:</div>
-        <div className="flex flex-wrap gap-2 pt-0.5">
+      <div className="p-3 bg-zinc-50 dark:bg-zinc-800/60 rounded-xl border border-zinc-200/80 dark:border-zinc-800 text-[11px] space-y-2 text-zinc-500 dark:text-zinc-400">
+        <div className="flex items-center justify-between">
+          <span className="font-bold text-zinc-700 dark:text-zinc-300">Quick Test Credentials:</span>
+          <span className="text-[10px] text-zinc-400">Pass: Student@1234</span>
+        </div>
+        <div className="grid grid-cols-2 gap-1.5 pt-0.5">
           <button
             type="button"
             onClick={() => {
-              setEmail('student@sppu.ac.in');
+              setEmail('aarav.deshmukh@sppu.ac.in');
               setPassword('Student@1234');
             }}
-            className="px-2 py-1 rounded bg-slate-200/80 dark:bg-slate-750 hover:bg-brand-50 hover:text-brand-600 dark:hover:bg-brand-950/60 dark:hover:text-brand-300 font-mono transition-colors"
+            className="text-left px-2 py-1.5 rounded-lg bg-zinc-100 dark:bg-zinc-750 hover:bg-brand-50 hover:text-brand-700 dark:hover:bg-brand-950/60 dark:hover:text-brand-300 transition-colors border border-transparent hover:border-brand-200 dark:hover:border-brand-800"
           >
-            Fill Student (student@sppu.ac.in)
+            <div className="font-bold text-zinc-800 dark:text-zinc-200 text-[11px]">FE • Aarav</div>
+            <div className="text-[10px] text-zinc-400 truncate">First Year (Sem 2)</div>
+          </button>
+          <button
+            type="button"
+            onClick={() => {
+              setEmail('sneha.kulkarni@sppu.ac.in');
+              setPassword('Student@1234');
+            }}
+            className="text-left px-2 py-1.5 rounded-lg bg-zinc-100 dark:bg-zinc-750 hover:bg-brand-50 hover:text-brand-700 dark:hover:bg-brand-950/60 dark:hover:text-brand-300 transition-colors border border-transparent hover:border-brand-200 dark:hover:border-brand-800"
+          >
+            <div className="font-bold text-zinc-800 dark:text-zinc-200 text-[11px]">SE • Sneha</div>
+            <div className="text-[10px] text-zinc-400 truncate">COMP (Sem 4)</div>
+          </button>
+          <button
+            type="button"
+            onClick={() => {
+              setEmail('rohan.patil@sppu.ac.in');
+              setPassword('Student@1234');
+            }}
+            className="text-left px-2 py-1.5 rounded-lg bg-zinc-100 dark:bg-zinc-750 hover:bg-brand-50 hover:text-brand-700 dark:hover:bg-brand-950/60 dark:hover:text-brand-300 transition-colors border border-transparent hover:border-brand-200 dark:hover:border-brand-800"
+          >
+            <div className="font-bold text-zinc-800 dark:text-zinc-200 text-[11px]">TE • Rohan</div>
+            <div className="text-[10px] text-zinc-400 truncate">IT (Sem 6)</div>
+          </button>
+          <button
+            type="button"
+            onClick={() => {
+              setEmail('ananya.joshi@sppu.ac.in');
+              setPassword('Student@1234');
+            }}
+            className="text-left px-2 py-1.5 rounded-lg bg-zinc-100 dark:bg-zinc-750 hover:bg-brand-50 hover:text-brand-700 dark:hover:bg-brand-950/60 dark:hover:text-brand-300 transition-colors border border-transparent hover:border-brand-200 dark:hover:border-brand-800"
+          >
+            <div className="font-bold text-zinc-800 dark:text-zinc-200 text-[11px]">BE • Ananya</div>
+            <div className="text-[10px] text-zinc-400 truncate">AI & DS (Sem 8)</div>
+          </button>
+          <button
+            type="button"
+            onClick={() => {
+              setEmail('vikram.shinde@sppu.ac.in');
+              setPassword('Student@1234');
+            }}
+            className="text-left px-2 py-1.5 rounded-lg bg-zinc-100 dark:bg-zinc-750 hover:bg-brand-50 hover:text-brand-700 dark:hover:bg-brand-950/60 dark:hover:text-brand-300 transition-colors border border-transparent hover:border-brand-200 dark:hover:border-brand-800"
+          >
+            <div className="font-bold text-zinc-800 dark:text-zinc-200 text-[11px]">SE • Vikram</div>
+            <div className="text-[10px] text-zinc-400 truncate">E&TC (Sem 3)</div>
           </button>
           <button
             type="button"
@@ -189,9 +237,10 @@ function LoginForm() {
               setEmail('admin@scoreedge.in');
               setPassword('Admin@1234');
             }}
-            className="px-2 py-1 rounded bg-slate-200/80 dark:bg-slate-750 hover:bg-brand-50 hover:text-brand-600 dark:hover:bg-brand-950/60 dark:hover:text-brand-300 font-mono transition-colors"
+            className="text-left px-2 py-1.5 rounded-lg bg-zinc-100 dark:bg-zinc-750 hover:bg-brand-50 hover:text-brand-700 dark:hover:bg-brand-950/60 dark:hover:text-brand-300 transition-colors border border-transparent hover:border-brand-200 dark:hover:border-brand-800"
           >
-            Fill Admin (admin@scoreedge.in)
+            <div className="font-bold text-zinc-800 dark:text-zinc-200 text-[11px]">Admin • System</div>
+            <div className="text-[10px] text-zinc-400 truncate">ScoreEdge Ops</div>
           </button>
         </div>
       </div>

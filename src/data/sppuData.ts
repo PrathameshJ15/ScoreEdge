@@ -308,6 +308,153 @@ export const DBMS_SAMPLE_PYQS: PYQQuestion[] = [
   },
 ];
 
+export interface DashboardQuestionItem {
+  id: string;
+  subjectCode: string;
+  unitNumber: number;
+  conceptCluster: string;
+  frequencyCount: number;
+  text: string;
+  marks: number;
+  examYears: string[];
+}
+
+export const DBMS_PYQS: DashboardQuestionItem[] = [
+  {
+    id: 'dbms-pyq-1',
+    subjectCode: '210241',
+    unitNumber: 3,
+    conceptCluster: 'Database Normalization',
+    frequencyCount: 4,
+    text: 'Explain 3NF and BCNF with a suitable example. Differentiate between 3NF and BCNF.',
+    marks: 8,
+    examYears: ['May 2024 (In-Sem)', 'Dec 2023', 'May 2023', 'Dec 2022'],
+  },
+  {
+    id: 'dbms-pyq-2',
+    subjectCode: '210241',
+    unitNumber: 4,
+    conceptCluster: 'Concurrency Control & 2PL',
+    frequencyCount: 4,
+    text: 'What is Two-Phase Locking (2PL)? Differentiate between Strict 2PL and Rigorous 2PL with concurrency graph.',
+    marks: 5,
+    examYears: ['May 2024', 'Dec 2023', 'May 2022'],
+  },
+  {
+    id: 'dbms-pyq-3',
+    subjectCode: '210241',
+    unitNumber: 4,
+    conceptCluster: 'Transaction Management',
+    frequencyCount: 4,
+    text: 'Define ACID properties of a transaction. Explain how Atomicity and Durability are enforced by DBMS.',
+    marks: 6,
+    examYears: ['Dec 2023 (End-Sem)', 'May 2023', 'Dec 2022', 'May 2021'],
+  },
+  {
+    id: 'dbms-pyq-4',
+    subjectCode: '210241',
+    unitNumber: 1,
+    conceptCluster: 'ER Modeling',
+    frequencyCount: 3,
+    text: 'Draw an ER Diagram for a Hospital Management System. Clearly indicate primary keys, weak entities, and cardinality constraints.',
+    marks: 10,
+    examYears: ['May 2024 (In-Sem)', 'Dec 2022', 'Dec 2021'],
+  },
+  {
+    id: 'dbms-pyq-5',
+    subjectCode: '210241',
+    unitNumber: 2,
+    conceptCluster: 'Relational Algebra',
+    frequencyCount: 3,
+    text: 'Explain fundamental operations of Relational Algebra: Selection, Projection, Cartesian Product, and Natural Join with relations.',
+    marks: 6,
+    examYears: ['May 2024 (In-Sem)', 'May 2023', 'Dec 2022'],
+  },
+  {
+    id: 'dbms-pyq-6',
+    subjectCode: '210241',
+    unitNumber: 5,
+    conceptCluster: 'Recovery Systems',
+    frequencyCount: 2,
+    text: 'Describe the ARIES recovery algorithm. Explain the three phases: Analysis, Redo, and Undo.',
+    marks: 8,
+    examYears: ['Dec 2023', 'May 2022'],
+  },
+];
+
+export const DBMS_NOTES: NoteItem[] = [
+  {
+    id: 'note-1',
+    subjectId: 'dbms',
+    unitId: 'dbms-u3',
+    title: 'Normalization: 1NF, 2NF, 3NF, BCNF & Lossless Decomposition',
+    readTimeMinutes: 12,
+    isFreePreview: true,
+    summary: 'Master functional dependencies, candidate keys, and step-by-step algorithms for 3NF synthesis and BCNF decomposition without dependency loss.',
+    keyTakeaways: [
+      '2 Marks: State formal BCNF definition (every determinant must be candidate key).',
+      '2 Marks: Provide relation schema R(A, B, C) with violating functional dependency.',
+      '2 Marks: Show lossless join decomposition proof using intersection attribute rule.',
+    ],
+  },
+  {
+    id: 'note-2',
+    subjectId: 'dbms',
+    unitId: 'dbms-u4',
+    title: 'Transaction ACID Properties & Conflict Serializability',
+    readTimeMinutes: 10,
+    isFreePreview: true,
+    summary: 'Understand Atomicity, Consistency, Isolation, Durability, Precedence Graph method for conflict serializability testing, and view equivalence.',
+    keyTakeaways: [
+      '2 Marks: Explain Atomicity using UNDO logging and Durability using REDO logging.',
+      '2 Marks: Draw precedence graph for given transaction schedule S.',
+      '2 Marks: Check for cycle: if acyclic then conflict serializable; else not serializable.',
+    ],
+  },
+  {
+    id: 'note-3',
+    subjectId: 'dbms',
+    unitId: 'dbms-u4',
+    title: 'Two-Phase Locking (2PL), Strict 2PL & Deadlock Avoidance',
+    readTimeMinutes: 8,
+    isFreePreview: false,
+    summary: 'Growing phase vs Shrinking phase, Cascading abort prevention with Strict/Rigorous 2PL, and Wait-Die vs Wound-Wait timestamp ordering algorithms.',
+    keyTakeaways: [
+      '2 Marks: Define Growing (acquiring locks) and Shrinking (releasing locks) phases.',
+      '2 Marks: Contrast Conservative 2PL vs Strict 2PL for cascading rollback safety.',
+      '2 Marks: Explain Wait-Die (non-preemptive) and Wound-Wait (preemptive) rules with age comparison.',
+    ],
+  },
+  {
+    id: 'note-4',
+    subjectId: 'dbms',
+    unitId: 'dbms-u1',
+    title: 'ER Modeling: Cardinality Ratios, Weak Entities & Schema Mapping',
+    readTimeMinutes: 15,
+    isFreePreview: true,
+    summary: 'Transform Entity-Relationship diagrams into clean relational tables, handle multivalued attributes, and identify identifying relationships.',
+    keyTakeaways: [
+      '2 Marks: Double rectangle for weak entity, dashed underline for partial key (discriminator).',
+      '2 Marks: Foreign key placement rule for 1:N and separate junction table for M:N.',
+      '2 Marks: Attribute mapping rules including composite attribute breakdown.',
+    ],
+  },
+  {
+    id: 'note-5',
+    subjectId: 'dbms',
+    unitId: 'dbms-u5',
+    title: 'Database Recovery: WAL, Checkpointing & ARIES Algorithm',
+    readTimeMinutes: 11,
+    isFreePreview: false,
+    summary: 'Write-Ahead Logging protocol, fuzzy checkpointing mechanisms, and the three phases of ARIES: Analysis, Redo, and Undo.',
+    keyTakeaways: [
+      '2 Marks: WAL protocol rule (log record must reach disk before dirty database page is written).',
+      '2 Marks: Checkpoint structure: active transaction table (ATT) and dirty page table (DPT).',
+      '2 Marks: 3 phases of ARIES explained with compensation log records (CLR).',
+    ],
+  },
+];
+
 export const DBMS_EXAM_PRESETS: ExamPlanPreset[] = [
   {
     durationLabel: '2 Hours',

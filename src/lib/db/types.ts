@@ -52,6 +52,13 @@ export interface User {
   password_hash: string;
   full_name: string;
   role: UserRole;
+  department?: string | null;
+  branch_code?: string | null;
+  academic_year?: string | null;
+  year_number?: number | null;
+  semester_number?: number | null;
+  pattern?: string | null;
+  target_sgpa?: number | null;
   avatar_url?: string | null;
   email_verified: boolean;
   is_active: boolean;
@@ -95,6 +102,7 @@ export interface Branch {
 export interface AcademicYear {
   id: string;
   pattern_id: string;
+  branch_id?: string;
   code: 'FE' | 'SE' | 'TE' | 'BE';
   name: string;
   year_number: number;

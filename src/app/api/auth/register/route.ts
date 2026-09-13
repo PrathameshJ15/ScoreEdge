@@ -53,6 +53,26 @@ export async function POST(request: NextRequest) {
 
     dbStore.users.push(newUser);
 
+    try {
+      const { prisma, isDatabaseConfigured } = await import('@/lib/prisma');
+      if (isDatabaseConfigured()) {
+        await prisma.user.create({
+          data: {
+            id: newUser.id,
+            email: newUser.email,
+            passwordHash: newUser.password_hash,
+            fullName: newUser.full_name,
+            role: newUser.role as any,
+            avatarUrl: newUser.avatar_url,
+            emailVerified: newUser.email_verified,
+            isActive: newUser.is_active,
+          },
+        });
+      }
+    } catch (err) {
+      console.warn('[Prisma Register Fallback]:', err);
+    }
+
     // Decoupled, privacy-preserving event tracking (no raw PII)
     trackServerEvent('signup', {
       userId: newUser.id,
