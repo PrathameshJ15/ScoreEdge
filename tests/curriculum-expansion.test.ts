@@ -85,13 +85,21 @@ describe('Curriculum Expansion & Multi-Tier Hierarchy Subsystem', () => {
       expect(compBranch?.onboarding_status).toBe('ACTIVE');
       expect(compBranch?.subject_count).toBeGreaterThan(0);
 
-      // IT, AI-DS, E&TC have 0 subjects in SE Computer MVP scope
-      const otherBranches = branches.filter((b) => b.code !== 'COMP');
-      for (const branch of otherBranches) {
-        expect(branch.is_supported).toBe(false);
-        expect(branch.onboarding_status).toBe('UNSUPPORTED');
-        expect(branch.subject_count).toBe(0);
-      }
+      // Verify that branches without active subjects are marked UNSUPPORTED rather than populating fake data
+      dbStore.branches.push({
+        id: 'branch-civil-temp',
+        code: 'CIVIL',
+        name: 'Civil Engineering',
+        description: 'No active subjects yet',
+        is_active: true,
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString(),
+      });
+      const updatedBranches = getBranchesWithStatus();
+      const civilBranch = updatedBranches.find((b) => b.code === 'CIVIL');
+      expect(civilBranch?.is_supported).toBe(false);
+      expect(civilBranch?.onboarding_status).toBe('UNSUPPORTED');
+      expect(civilBranch?.subject_count).toBe(0);
     });
 
     it('filters subjects strictly by hierarchy parameters', () => {
@@ -104,11 +112,10 @@ describe('Curriculum Expansion & Multi-Tier Hierarchy Subsystem', () => {
       });
       expect(compSubjects.length).toBeGreaterThan(0);
 
-      const itBranch = dbStore.branches.find((b) => b.code === 'IT');
-      const itSubjects = getFilteredSubjects({
-        branch_id: itBranch?.id,
+      const unseededSubjects = getFilteredSubjects({
+        branch_id: 'branch-civil-temp',
       });
-      expect(itSubjects.length).toBe(0);
+      expect(unseededSubjects.length).toBe(0);
     });
 
     it('builds a hierarchical curriculum tree representation', () => {

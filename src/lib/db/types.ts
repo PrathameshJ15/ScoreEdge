@@ -554,6 +554,8 @@ export interface AISession {
   id: string;
   user_id: string;
   subject_id?: string;
+  file_id?: string;
+  file_name?: string;
   title: string;
   source_mode: KnowledgeSourceMode;
   created_at: string;

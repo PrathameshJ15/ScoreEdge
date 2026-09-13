@@ -20,7 +20,9 @@ describe('Database Store & Academic Data Model', () => {
   });
 
   it('has all 5 SE Computer subjects configured', () => {
-    const subjects = dbStore.subjects.filter((s) => s.branch_id === 'branch-comp' && !s.deleted_at);
+    const subjects = dbStore.subjects.filter(
+      (s) => s.branch_id === 'branch-comp' && ['sem-3', 'sem-4'].includes(s.semester_id) && !s.deleted_at
+    );
     expect(subjects.length).toBe(5);
 
     const shortNames = subjects.map((s) => s.short_name);

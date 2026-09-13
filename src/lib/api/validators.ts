@@ -210,6 +210,7 @@ export const AIQuerySchema = z.object({
       'EXPLAIN_SIMPLY',
     ])
     .optional(),
+  session_id: z.string().optional(),
 });
 
 export const UniversityCreateSchema = z.object({
